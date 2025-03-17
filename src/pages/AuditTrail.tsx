@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import AuditTrailComponent from '@/components/AuditTrail';
-import { Search, Filter, Calendar, Download, FileDown, FileText, User, Settings, RefreshCw } from 'lucide-react';
+import { Search, Filter, Calendar, Download, FileDown, FileText, User, Settings, RefreshCw, FileCheck } from 'lucide-react';
 
 const AuditTrailPage = () => {
   const [timeframe, setTimeframe] = useState('all');
