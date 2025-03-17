@@ -12,7 +12,7 @@ const Dashboard = () => {
     {
       id: '1',
       trackingNumber: 'SHP-12345678',
-      status: 'in-transit',
+      status: 'in-transit' as const,
       origin: 'New York, NY',
       destination: 'Los Angeles, CA',
       estimatedDelivery: '2023-05-18T00:00:00Z',
@@ -22,7 +22,7 @@ const Dashboard = () => {
     {
       id: '2',
       trackingNumber: 'SHP-87654321',
-      status: 'delivered',
+      status: 'delivered' as const,
       origin: 'San Francisco, CA',
       destination: 'Seattle, WA',
       estimatedDelivery: '2023-05-12T00:00:00Z',
@@ -32,7 +32,7 @@ const Dashboard = () => {
     {
       id: '3',
       trackingNumber: 'SHP-23456789',
-      status: 'pending',
+      status: 'pending' as const,
       origin: 'Chicago, IL',
       destination: 'Miami, FL',
       estimatedDelivery: '2023-05-20T00:00:00Z',
@@ -42,7 +42,7 @@ const Dashboard = () => {
     {
       id: '4',
       trackingNumber: 'SHP-34567890',
-      status: 'delayed',
+      status: 'delayed' as const,
       origin: 'Boston, MA',
       destination: 'Austin, TX',
       estimatedDelivery: '2023-05-19T00:00:00Z',

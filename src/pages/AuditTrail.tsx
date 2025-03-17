@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import AuditTrailComponent from '@/components/AuditTrail';
-import { Search, Filter, Calendar, Download, FileDown, FileCheck, FileText, User, Settings, RefreshCw } from 'lucide-react';
+import { Search, Filter, Calendar, Download, FileDown, FileText, User, Settings, RefreshCw } from 'lucide-react';
 
 const AuditTrailPage = () => {
   const [timeframe, setTimeframe] = useState('all');
@@ -11,7 +11,7 @@ const AuditTrailPage = () => {
   const auditEvents = [
     {
       id: '1',
-      type: 'document',
+      type: 'document' as const,
       action: 'document uploaded',
       timestamp: '2023-05-14T15:30:45Z',
       user: 'John Doe',
@@ -21,7 +21,7 @@ const AuditTrailPage = () => {
     },
     {
       id: '2',
-      type: 'user',
+      type: 'user' as const,
       action: 'access granted',
       timestamp: '2023-05-14T12:15:22Z',
       user: 'Jane Smith',
@@ -31,7 +31,7 @@ const AuditTrailPage = () => {
     },
     {
       id: '3',
-      type: 'system',
+      type: 'system' as const,
       action: 'compliance check completed',
       timestamp: '2023-05-13T09:42:18Z',
       user: 'System',
@@ -41,7 +41,7 @@ const AuditTrailPage = () => {
     },
     {
       id: '4',
-      type: 'document',
+      type: 'document' as const,
       action: 'document signed',
       timestamp: '2023-05-13T08:12:55Z',
       user: 'Robert Johnson',
@@ -50,7 +50,7 @@ const AuditTrailPage = () => {
     },
     {
       id: '5',
-      type: 'system',
+      type: 'system' as const,
       action: 'blockchain verification',
       timestamp: '2023-05-12T14:25:33Z',
       user: 'System',
