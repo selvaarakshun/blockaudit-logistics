@@ -1,20 +1,9 @@
-
 import { useState } from 'react';
 import { RefreshCw } from 'lucide-react';
 import AuditTrailComponent from '@/components/AuditTrail';
 import TimeframeSelector from './TimeframeSelector';
 import AuditToolbar from './AuditToolbar';
-
-interface AuditEvent {
-  id: string;
-  type: 'document' | 'user' | 'system';
-  action: string;
-  timestamp: string;
-  user: string;
-  details: string;
-  verified: boolean;
-  hash?: string;
-}
+import { AuditEvent } from '@/types/audit';
 
 const AuditContent = () => {
   const [timeframe, setTimeframe] = useState('all');
