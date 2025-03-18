@@ -1,6 +1,7 @@
 
 import { FileText, User, Settings, FileCheck } from 'lucide-react';
 import { toast } from "@/components/ui/use-toast";
+import { useState } from 'react';
 
 interface CategoryItem {
   name: string;
@@ -10,6 +11,8 @@ interface CategoryItem {
 }
 
 const EventCategories = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  
   const categories: CategoryItem[] = [
     { name: 'Documents', icon: <FileText className="size-4" />, count: 24, type: 'document' },
     { name: 'User Actions', icon: <User className="size-4" />, count: 18, type: 'user' },
@@ -18,9 +21,13 @@ const EventCategories = () => {
   ];
 
   const handleCategoryClick = (category: CategoryItem) => {
+    setSelectedCategory(category.type === selectedCategory ? null : category.type);
+    
     toast({
-      title: `${category.name} Selected`,
-      description: `Filtered to show ${category.count} ${category.name.toLowerCase()}`,
+      title: `${category.name} ${category.type === selectedCategory ? 'Unselected' : 'Selected'}`,
+      description: category.type === selectedCategory 
+        ? `Showing all events` 
+        : `Filtered to show ${category.count} ${category.name.toLowerCase()}`,
     });
   };
 
@@ -34,11 +41,17 @@ const EventCategories = () => {
           {categories.map((category, index) => (
             <div 
               key={index}
-              className="flex justify-between items-center p-2 rounded-md hover:bg-logistics-light-gray dark:hover:bg-white/5 cursor-pointer"
+              className={`flex justify-between items-center p-2 rounded-md hover:bg-logistics-light-gray dark:hover:bg-white/5 cursor-pointer transition-colors ${
+                selectedCategory === category.type ? 'bg-logistics-light-gray dark:bg-white/10' : ''
+              }`}
               onClick={() => handleCategoryClick(category)}
             >
               <div className="flex items-center gap-2">
-                <div className="size-8 rounded-md bg-logistics-light-blue dark:bg-logistics-blue/10 flex items-center justify-center text-logistics-blue">
+                <div className={`size-8 rounded-md ${
+                  selectedCategory === category.type 
+                    ? 'bg-logistics-blue text-white' 
+                    : 'bg-logistics-light-blue dark:bg-logistics-blue/10 text-logistics-blue'
+                } flex items-center justify-center`}>
                   {category.icon}
                 </div>
                 <span>{category.name}</span>
