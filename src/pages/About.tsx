@@ -19,6 +19,7 @@ import InteractiveMap from '@/components/map/InteractiveMap';
 
 const About = () => {
   const [activeSection, setActiveSection] = useState(0);
+  // Specify HTMLDivElement as the type for our refs
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
   
   useEffect(() => {
@@ -131,7 +132,7 @@ const About = () => {
         
         {/* Overview Section */}
         <section 
-          ref={el => sectionRefs.current[0] = el} 
+          ref={(el) => sectionRefs.current[0] = el} 
           className="py-16 md:py-24"
         >
           <div className="container">
@@ -208,7 +209,7 @@ const About = () => {
         
         {/* Technology Section */}
         <section 
-          ref={el => sectionRefs.current[1] = el}
+          ref={(el) => sectionRefs.current[1] = el}
           className="py-16 md:py-24 bg-logistics-light-gray dark:bg-logistics-dark/50"
         >
           <div className="container">
@@ -326,7 +327,7 @@ const About = () => {
         
         {/* Benefits Section */}
         <section 
-          ref={el => sectionRefs.current[2] = el}
+          ref={(el) => sectionRefs.current[2] = el}
           className="py-16 md:py-24"
         >
           <div className="container">
@@ -401,7 +402,7 @@ const About = () => {
         
         {/* Map Section */}
         <section 
-          ref={el => sectionRefs.current[3] = el}
+          ref={(el) => sectionRefs.current[3] = el}
           className="py-16 md:py-24 bg-logistics-light-gray dark:bg-logistics-dark/50"
         >
           <div className="container">
@@ -434,7 +435,7 @@ const About = () => {
         
         {/* Team Section */}
         <section 
-          ref={el => sectionRefs.current[4] = el}
+          ref={(el) => sectionRefs.current[4] = el}
           className="py-16 md:py-24"
         >
           <div className="container">
