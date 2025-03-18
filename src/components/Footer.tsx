@@ -12,9 +12,9 @@ const Footer = () => {
           <div className="md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
               <div className="flex items-center justify-center size-8 bg-logistics-blue rounded-md text-white">
-                BA
+                GC
               </div>
-              <span className="font-semibold text-lg tracking-tight">BlockAudit</span>
+              <span className="font-semibold text-lg tracking-tight">GuudzChain</span>
             </Link>
             <p className="text-sm text-logistics-gray mb-4 max-w-xs">
               Revolutionizing logistics and audit processes with blockchain technology for enhanced transparency and efficiency.
@@ -38,7 +38,7 @@ const Footer = () => {
               <li><Link to="/dashboard" className="text-sm hover:text-logistics-blue transition-colors">Dashboard</Link></li>
               <li><Link to="/audit-trail" className="text-sm hover:text-logistics-blue transition-colors">Audit Trail</Link></li>
               <li><Link to="/blockchain-explorer" className="text-sm hover:text-logistics-blue transition-colors">Blockchain Explorer</Link></li>
-              <li><a href="#" className="text-sm hover:text-logistics-blue transition-colors">Pricing</a></li>
+              <li><Link to="/about" className="text-sm hover:text-logistics-blue transition-colors">About Us</Link></li>
             </ul>
           </div>
 
@@ -55,7 +55,7 @@ const Footer = () => {
           <div>
             <h3 className="font-medium text-sm uppercase tracking-wider text-logistics-gray mb-4">Company</h3>
             <ul className="space-y-3">
-              <li><a href="#" className="text-sm hover:text-logistics-blue transition-colors">About Us</a></li>
+              <li><Link to="/about" className="text-sm hover:text-logistics-blue transition-colors">About Us</Link></li>
               <li><a href="#" className="text-sm hover:text-logistics-blue transition-colors">Careers</a></li>
               <li><a href="#" className="text-sm hover:text-logistics-blue transition-colors">Contact</a></li>
               <li><a href="#" className="text-sm hover:text-logistics-blue transition-colors">Legal</a></li>
@@ -65,7 +65,7 @@ const Footer = () => {
 
         <div className="border-t border-border mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-logistics-gray">
-            &copy; {currentYear} BlockAudit. All rights reserved.
+            &copy; {currentYear} GuudzChain. All rights reserved.
           </p>
           <div className="flex gap-5">
             <a href="#" className="text-sm text-logistics-gray hover:text-logistics-dark transition-colors">

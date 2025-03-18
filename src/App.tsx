@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import AuditTrailPage from "./pages/AuditTrail";
 import Dashboard from "./pages/Dashboard";
 import BlockchainExplorer from "./pages/BlockchainExplorer";
+import About from "./pages/About";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/audit-trail" element={<AuditTrailPage />} />
           <Route path="/blockchain-explorer" element={<BlockchainExplorer />} />
+          <Route path="/about" element={<About />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

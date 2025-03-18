@@ -32,6 +32,7 @@ const Navbar = () => {
     { name: 'Dashboard', path: '/dashboard' },
     { name: 'Audit Trail', path: '/audit-trail' },
     { name: 'Blockchain Explorer', path: '/blockchain-explorer' },
+    { name: 'About', path: '/about' },
   ];
 
   const isActive = (path: string) => {
@@ -55,9 +56,9 @@ const Navbar = () => {
           className="flex items-center gap-2 font-semibold text-lg text-logistics-dark dark:text-white"
         >
           <div className="flex items-center justify-center size-8 bg-logistics-blue rounded-md text-white">
-            BA
+            GC
           </div>
-          <span className="tracking-tight">BlockAudit</span>
+          <span className="tracking-tight">GuudzChain</span>
         </Link>
 
         {/* Desktop Navigation */}

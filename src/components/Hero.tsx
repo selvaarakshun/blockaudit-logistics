@@ -19,7 +19,7 @@ const Hero = () => {
           
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 text-balance">
             Transparent Logistics & Auditing 
-            <span className="text-logistics-blue dark:text-logistics-blue"> with Blockchain</span>
+            <span className="text-logistics-blue dark:text-logistics-blue"> with GuudzChain</span>
           </h1>
           
           <p className="text-lg md:text-xl text-logistics-gray max-w-2xl mx-auto mb-8 text-balance">
@@ -30,9 +30,9 @@ const Hero = () => {
             <Link to="/dashboard" className="btn-primary text-base h-12 px-6">
               Get Started
             </Link>
-            <a href="#features" className="btn-secondary text-base h-12 px-6 flex items-center justify-center gap-1">
+            <Link to="/about" className="btn-secondary text-base h-12 px-6 flex items-center justify-center gap-1">
               Learn More <ChevronRight className="size-4" />
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -84,7 +84,7 @@ const Hero = () => {
             
             <div className="absolute bottom-0 left-0 right-0 text-center p-4">
               <span className="inline-block px-3 py-1 bg-logistics-blue text-white text-xs font-medium rounded-full">
-                Powered by Blockchain Technology
+                Powered by GuudzChain Technology
               </span>
             </div>
           </div>

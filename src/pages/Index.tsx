@@ -30,12 +30,12 @@ const Index = () => {
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 {
-                  quote: "BlockAudit has revolutionized our supply chain management. The transparency and security it provides are unmatched.",
+                  quote: "GuudzChain has revolutionized our supply chain management. The transparency and security it provides are unmatched.",
                   author: "Sarah Johnson",
                   role: "Supply Chain Director, Global Logistics Inc."
                 },
                 {
-                  quote: "Implementing BlockAudit has reduced our audit times by 75% while increasing accuracy. It's been transformative.",
+                  quote: "Implementing GuudzChain has reduced our audit times by 75% while increasing accuracy. It's been transformative.",
                   author: "Michael Chen",
                   role: "Chief Operating Officer, FastTrack Shipping"
                 },
@@ -122,9 +122,9 @@ const Index = () => {
                 <Link to="/dashboard" className="btn-primary text-base h-12 px-6">
                   Get Started Now
                 </Link>
-                <button className="btn-secondary text-base h-12 px-6 flex items-center justify-center gap-1">
-                  Request a Demo <ChevronRight className="size-4" />
-                </button>
+                <Link to="/about" className="btn-secondary text-base h-12 px-6 flex items-center justify-center gap-1">
+                  Learn More <ChevronRight className="size-4" />
+                </Link>
               </div>
             </div>
           </div>
