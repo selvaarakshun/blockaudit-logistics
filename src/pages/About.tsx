@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -19,8 +18,11 @@ import InteractiveMap from '@/components/map/InteractiveMap';
 
 const About = () => {
   const [activeSection, setActiveSection] = useState(0);
-  // Specify HTMLDivElement as the type for our refs
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  
+  if (sectionRefs.current.length === 0) {
+    sectionRefs.current = Array(5).fill(null);
+  }
   
   useEffect(() => {
     const handleScroll = () => {
@@ -72,7 +74,6 @@ const About = () => {
       <Navbar />
       
       <main className="flex-grow pt-20">
-        {/* Hero Section */}
         <section className="relative py-20 border-b border-border overflow-hidden">
           <div className="absolute inset-0 -z-10">
             <BlockchainAnimation />
@@ -104,7 +105,6 @@ const About = () => {
           </div>
         </section>
         
-        {/* Navigation Dots */}
         <div className="hidden lg:flex fixed right-8 top-1/2 -translate-y-1/2 flex-col gap-4 z-40">
           {['Overview', 'Technology', 'Benefits', 'Map', 'Team'].map((label, index) => (
             <button
@@ -130,9 +130,8 @@ const About = () => {
           ))}
         </div>
         
-        {/* Overview Section */}
         <section 
-          ref={(el) => sectionRefs.current[0] = el} 
+          ref={(el: HTMLDivElement | null) => sectionRefs.current[0] = el} 
           className="py-16 md:py-24"
         >
           <div className="container">
@@ -169,7 +168,6 @@ const About = () => {
               <div className="relative">
                 <div className="relative rounded-xl overflow-hidden shadow-strong">
                   <div className="aspect-square bg-logistics-light-blue/20 dark:bg-logistics-blue/10 relative overflow-hidden">
-                    {/* Abstract blockchain visualization */}
                     <div className="absolute inset-8 rounded-full border-4 border-dashed border-logistics-blue/30 animate-spin" style={{ animationDuration: '30s' }}></div>
                     
                     <div className="absolute inset-0 flex items-center justify-center">
@@ -180,7 +178,6 @@ const About = () => {
                       </div>
                     </div>
                     
-                    {/* Floating elements */}
                     {[...Array(6)].map((_, i) => (
                       <div 
                         key={i}
@@ -207,9 +204,8 @@ const About = () => {
           </div>
         </section>
         
-        {/* Technology Section */}
         <section 
-          ref={(el) => sectionRefs.current[1] = el}
+          ref={(el: HTMLDivElement | null) => sectionRefs.current[1] = el}
           className="py-16 md:py-24 bg-logistics-light-gray dark:bg-logistics-dark/50"
         >
           <div className="container">
@@ -267,7 +263,6 @@ const About = () => {
                   <h4 className="text-xl font-semibold mb-4">Blockchain Architecture</h4>
                   
                   <div className="pt-6 space-y-6">
-                    {/* Block chain visualization */}
                     <div className="flex items-center gap-4 overflow-x-auto pb-4">
                       {[...Array(5)].map((_, i) => (
                         <div key={i} className="flex items-center flex-shrink-0">
@@ -325,9 +320,8 @@ const About = () => {
           </div>
         </section>
         
-        {/* Benefits Section */}
         <section 
-          ref={(el) => sectionRefs.current[2] = el}
+          ref={(el: HTMLDivElement | null) => sectionRefs.current[2] = el}
           className="py-16 md:py-24"
         >
           <div className="container">
@@ -385,7 +379,6 @@ const About = () => {
                   />
                 </div>
                 
-                {/* Stats overlay */}
                 <div className="absolute top-6 right-6 size-36 rounded-xl bg-white dark:bg-logistics-dark shadow-strong border border-border p-4 flex flex-col justify-center">
                   <div className="text-3xl font-bold text-logistics-blue mb-1">42%</div>
                   <p className="text-sm text-logistics-gray">Reduction in processing time</p>
@@ -400,9 +393,8 @@ const About = () => {
           </div>
         </section>
         
-        {/* Map Section */}
         <section 
-          ref={(el) => sectionRefs.current[3] = el}
+          ref={(el: HTMLDivElement | null) => sectionRefs.current[3] = el}
           className="py-16 md:py-24 bg-logistics-light-gray dark:bg-logistics-dark/50"
         >
           <div className="container">
@@ -433,9 +425,8 @@ const About = () => {
           </div>
         </section>
         
-        {/* Team Section */}
         <section 
-          ref={(el) => sectionRefs.current[4] = el}
+          ref={(el: HTMLDivElement | null) => sectionRefs.current[4] = el}
           className="py-16 md:py-24"
         >
           <div className="container">
@@ -495,7 +486,6 @@ const About = () => {
           </div>
         </section>
         
-        {/* CTA Section */}
         <section className="py-16 md:py-24 bg-logistics-blue text-white">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
