@@ -1,7 +1,11 @@
 
+import { useState } from 'react';
 import { Search, Plus } from 'lucide-react';
+import NewShipmentDialog from './NewShipmentDialog';
 
 const ShipmentHeader = () => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  
   return (
     <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4">
       <div>
@@ -19,11 +23,16 @@ const ShipmentHeader = () => {
           />
         </div>
         
-        <button className="btn-primary flex items-center gap-1">
+        <button 
+          className="btn-primary flex items-center gap-1"
+          onClick={() => setDialogOpen(true)}
+        >
           <Plus className="size-4" />
           <span>New Shipment</span>
         </button>
       </div>
+      
+      <NewShipmentDialog open={dialogOpen} onOpenChange={setDialogOpen} />
     </div>
   );
 };
