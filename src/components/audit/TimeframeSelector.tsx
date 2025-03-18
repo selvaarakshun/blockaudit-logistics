@@ -1,5 +1,6 @@
 
 import { Dispatch, SetStateAction } from 'react';
+import { toast } from "@/components/ui/use-toast";
 
 interface TimeframeSelectorProps {
   timeframe: string;
@@ -8,6 +9,13 @@ interface TimeframeSelectorProps {
 
 const TimeframeSelector = ({ timeframe, setTimeframe }: TimeframeSelectorProps) => {
   const timeframes = ['all', 'today', 'this week', 'this month'];
+  
+  const handleTimeframeChange = (newTimeframe: string) => {
+    setTimeframe(newTimeframe);
+    toast({
+      description: `Viewing audit events from ${newTimeframe === 'all' ? 'all time' : newTimeframe}`,
+    });
+  };
   
   return (
     <div className="flex items-center overflow-x-auto whitespace-nowrap gap-2 mb-6 pb-2">
@@ -19,7 +27,7 @@ const TimeframeSelector = ({ timeframe, setTimeframe }: TimeframeSelectorProps) 
               ? 'bg-logistics-blue text-white' 
               : 'bg-white dark:bg-logistics-dark/80 border border-border hover:bg-logistics-light-gray dark:hover:bg-white/5'
           }`}
-          onClick={() => setTimeframe(tab)}
+          onClick={() => handleTimeframeChange(tab)}
         >
           {tab.charAt(0).toUpperCase() + tab.slice(1)}
         </button>

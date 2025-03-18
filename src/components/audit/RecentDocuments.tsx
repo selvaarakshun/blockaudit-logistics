@@ -1,5 +1,6 @@
 
-import { FileText, FileDown } from 'lucide-react';
+import { FileText, FileDown, Eye } from 'lucide-react';
+import { toast } from "@/components/ui/use-toast";
 
 interface Document {
   name: string;
@@ -13,6 +14,20 @@ const RecentDocuments = () => {
     { name: 'Customs Declaration', id: 'CDF-98765', date: '2023-05-13' },
     { name: 'Certificate of Origin', id: 'COO-54321', date: '2023-05-12' }
   ];
+
+  const handleDownload = (doc: Document) => {
+    toast({
+      title: "Download Started",
+      description: `Downloading ${doc.name} (${doc.id})`,
+    });
+  };
+
+  const handleView = (doc: Document) => {
+    toast({
+      title: "Opening Document",
+      description: `Viewing ${doc.name} (${doc.id})`,
+    });
+  };
 
   return (
     <div className="bg-white dark:bg-logistics-dark/50 rounded-xl border border-border overflow-hidden">
@@ -35,9 +50,22 @@ const RecentDocuments = () => {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-logistics-gray">{doc.id}</span>
-                <button className="text-logistics-blue hover:text-logistics-blue/80">
-                  <FileDown className="size-4" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button 
+                    className="text-logistics-blue hover:text-logistics-blue/80"
+                    onClick={() => handleView(doc)}
+                    title="View Document"
+                  >
+                    <Eye className="size-4" />
+                  </button>
+                  <button 
+                    className="text-logistics-blue hover:text-logistics-blue/80"
+                    onClick={() => handleDownload(doc)}
+                    title="Download Document"
+                  >
+                    <FileDown className="size-4" />
+                  </button>
+                </div>
               </div>
             </div>
           ))}

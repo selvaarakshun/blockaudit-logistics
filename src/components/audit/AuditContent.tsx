@@ -1,12 +1,17 @@
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import { RefreshCw } from 'lucide-react';
 import AuditTrailComponent from '@/components/AuditTrail';
 import TimeframeSelector from './TimeframeSelector';
 import AuditToolbar from './AuditToolbar';
 import { AuditEvent } from '@/types/audit';
+import { toast } from "@/components/ui/use-toast";
 
 const AuditContent = () => {
   const [timeframe, setTimeframe] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredEvents, setFilteredEvents] = useState<AuditEvent[]>([]);
+  const [loading, setLoading] = useState(false);
   
   const auditEvents: AuditEvent[] = [
     {
@@ -60,16 +65,74 @@ const AuditContent = () => {
     }
   ];
 
+  useEffect(() => {
+    filterEvents();
+  }, [timeframe, searchQuery]);
+
+  const filterEvents = () => {
+    let filtered = [...auditEvents];
+    
+    // Filter by timeframe
+    if (timeframe !== 'all') {
+      const now = new Date();
+      let startDate = new Date();
+      
+      if (timeframe === 'today') {
+        startDate.setHours(0, 0, 0, 0);
+      } else if (timeframe === 'this week') {
+        const day = now.getDay() || 7;
+        startDate.setDate(now.getDate() - day + 1);
+        startDate.setHours(0, 0, 0, 0);
+      } else if (timeframe === 'this month') {
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      }
+      
+      filtered = filtered.filter(event => new Date(event.timestamp) >= startDate);
+    }
+    
+    // Filter by search query
+    if (searchQuery.trim() !== '') {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(event => 
+        event.action.toLowerCase().includes(query) ||
+        event.user.toLowerCase().includes(query) ||
+        event.details.toLowerCase().includes(query)
+      );
+    }
+    
+    setFilteredEvents(filtered);
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const handleLoadMore = () => {
+    setLoading(true);
+    // Simulate loading more data
+    setTimeout(() => {
+      toast({
+        title: "No more audit events",
+        description: "All available audit events have been loaded.",
+      });
+      setLoading(false);
+    }, 1000);
+  };
+
   return (
     <div className="lg:col-span-8">
-      <AuditToolbar />
+      <AuditToolbar onSearch={handleSearch} />
       <TimeframeSelector timeframe={timeframe} setTimeframe={setTimeframe} />
-      <AuditTrailComponent events={auditEvents} />
+      <AuditTrailComponent events={filteredEvents.length > 0 ? filteredEvents : auditEvents} />
       
       <div className="mt-8 flex items-center justify-center">
-        <button className="btn-secondary flex items-center gap-1">
-          <RefreshCw className="size-4" />
-          <span>Load More Events</span>
+        <button 
+          className="btn-secondary flex items-center gap-1"
+          onClick={handleLoadMore}
+          disabled={loading}
+        >
+          <RefreshCw className={`size-4 ${loading ? 'animate-spin' : ''}`} />
+          <span>{loading ? 'Loading...' : 'Load More Events'}</span>
         </button>
       </div>
     </div>

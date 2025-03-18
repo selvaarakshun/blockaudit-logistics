@@ -1,9 +1,10 @@
 
 import { useState } from 'react';
-import { Shield, AlertCircle, File, User, Clock, Download } from 'lucide-react';
+import { Shield, AlertCircle, File, User, Clock, Download, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import BlockchainVerification from '../BlockchainVerification';
 import { AuditEvent } from '@/types/audit';
+import { toast } from "@/components/ui/use-toast";
 
 interface AuditEventItemProps {
   event: AuditEvent;
@@ -56,6 +57,20 @@ const AuditEventItem = ({ event }: AuditEventItemProps) => {
     return action.charAt(0).toUpperCase() + action.slice(1);
   };
 
+  const handleDownloadEvidence = () => {
+    toast({
+      title: "Download Started",
+      description: `Downloading evidence for ${event.action}`,
+    });
+  };
+
+  const handleViewDetails = () => {
+    toast({
+      title: "Full Details",
+      description: `Viewing full details for ${event.action}`,
+    });
+  };
+
   return (
     <div 
       className="rounded-lg border border-border overflow-hidden bg-white dark:bg-logistics-dark/50 transition-all hover:shadow-subtle"
@@ -77,7 +92,7 @@ const AuditEventItem = ({ event }: AuditEventItemProps) => {
               <p className="text-sm text-logistics-gray">{formatDate(event.timestamp)}</p>
             </div>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
             {event.verified ? (
               <div className="flex items-center gap-1 text-xs text-logistics-success bg-logistics-success/10 px-2 py-1 rounded-full">
                 <Shield className="size-3" />
@@ -89,6 +104,7 @@ const AuditEventItem = ({ event }: AuditEventItemProps) => {
                 <span>Pending</span>
               </div>
             )}
+            {isExpanded ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
           </div>
         </div>
         
@@ -109,12 +125,31 @@ const AuditEventItem = ({ event }: AuditEventItemProps) => {
             timestamp={event.timestamp}
           />
 
-          <div className="mt-4 flex items-center gap-2">
-            <button className="btn-secondary text-xs h-8 flex items-center gap-1">
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <button 
+              className="btn-secondary text-xs h-8 flex items-center gap-1"
+              onClick={handleDownloadEvidence}
+            >
               <Download className="size-3" />
               <span>Download Evidence</span>
             </button>
-            <button className="btn-ghost text-xs h-8">View Full Details</button>
+            <button 
+              className="btn-ghost text-xs h-8"
+              onClick={handleViewDetails}
+            >
+              View Full Details
+            </button>
+            {event.hash && (
+              <a 
+                href={`/blockchain-explorer?hash=${event.hash}`}
+                className="btn-ghost text-xs h-8 flex items-center gap-1 text-logistics-blue"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <ExternalLink className="size-3" />
+                <span>View on Blockchain</span>
+              </a>
+            )}
           </div>
         </div>
       )}
