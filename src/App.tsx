@@ -33,6 +33,7 @@ const App = () => (
           {/* Tax Compliance Routes */}
           <Route path="/tax-compliance" element={<TaxCompliance />} />
           <Route path="/tax-compliance/icegate" element={<IcegatePage />} />
+          <Route path="/tax-compliance/duties" element={<TaxCompliance />} />
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
