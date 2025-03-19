@@ -67,7 +67,9 @@ const NewShipmentDialog = ({ open, onOpenChange }: NewShipmentDialogProps) => {
     }
   });
 
-  const onSubmit = async (data: ShipmentFormValues) => {
+  // Update this function to accept ShipmentFormInputs instead of ShipmentFormValues
+  // The zod transformation will happen through the resolver
+  const onSubmit = async (data: ShipmentFormInputs) => {
     setIsSubmitting(true);
     
     try {
@@ -75,6 +77,8 @@ const NewShipmentDialog = ({ open, onOpenChange }: NewShipmentDialogProps) => {
       // This would connect to MongoDB in a real implementation
       await new Promise(resolve => setTimeout(resolve, 1500));
       
+      // The data here has already been transformed by Zod through the resolver
+      // So items is now a number, but TypeScript doesn't know that
       console.log('Creating new shipment:', data);
       
       // Reset form and close dialog
