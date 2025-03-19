@@ -1,5 +1,5 @@
 
-import { Package, MapPin, Truck } from 'lucide-react';
+import { Package, MapPin, Truck, Loader2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -119,16 +119,26 @@ const ShipmentForm = ({ form, onSubmit, isSubmitting, onCancel }: ShipmentFormPr
             type="button" 
             variant="outline" 
             onClick={onCancel}
+            disabled={isSubmitting}
           >
             Cancel
           </Button>
           <Button 
             type="submit" 
             disabled={isSubmitting}
-            className="gap-1"
+            className="gap-1 min-w-[140px] transition-all"
           >
-            {isSubmitting ? "Creating..." : "Create Shipment"}
-            {!isSubmitting && <Package className="size-4" />}
+            {isSubmitting ? (
+              <>
+                <Loader2 className="size-4 animate-spin" />
+                Creating...
+              </>
+            ) : (
+              <>
+                Create Shipment
+                <Package className="size-4" />
+              </>
+            )}
           </Button>
         </div>
       </form>
