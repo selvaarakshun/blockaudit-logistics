@@ -23,6 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 // Define the form schema with validation rules
 const shipmentFormSchema = z.object({
@@ -35,6 +36,16 @@ const shipmentFormSchema = z.object({
   estimatedDelivery: z.string().min(1, "Please select a delivery date")
 });
 
+// Explicitly define the input form type (before transformation)
+type ShipmentFormInputs = {
+  shipmentName: string;
+  origin: string;
+  destination: string;
+  items: string; // This is a string in the form inputs
+  estimatedDelivery: string;
+};
+
+// The final values after Zod transforms them
 type ShipmentFormValues = z.infer<typeof shipmentFormSchema>;
 
 interface NewShipmentDialogProps {
@@ -45,13 +56,13 @@ interface NewShipmentDialogProps {
 const NewShipmentDialog = ({ open, onOpenChange }: NewShipmentDialogProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const form = useForm<ShipmentFormValues>({
+  const form = useForm<ShipmentFormInputs>({
     resolver: zodResolver(shipmentFormSchema),
     defaultValues: {
       shipmentName: '',
       origin: '',
       destination: '',
-      items: '', // This should be a string since our schema handles the conversion
+      items: '', // This is correctly a string for the form input
       estimatedDelivery: ''
     }
   });
