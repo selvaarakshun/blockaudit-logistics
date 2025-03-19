@@ -1,5 +1,5 @@
 
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, TrendingUp, Shield, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Hero = () => {
@@ -17,27 +17,54 @@ const Hero = () => {
             <span className="text-sm text-logistics-gray">Blockchain Powered Logistics</span>
           </div>
           
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 text-balance">
-            Transparent Logistics & Auditing 
-            <span className="text-logistics-blue dark:text-logistics-blue"> with GuudzChain</span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 text-balance bg-gradient-to-r from-logistics-blue to-logistics-indigo bg-clip-text text-transparent dark:from-white dark:to-logistics-blue">
+            Transparent Logistics & <br className="hidden sm:block" />
+            Compliance with GuudzChain
           </h1>
           
           <p className="text-lg md:text-xl text-logistics-gray max-w-2xl mx-auto mb-8 text-balance">
-            Revolutionize your supply chain with immutable records, real-time tracking, and complete transparency using our blockchain-based platform.
+            Revolutionize your supply chain with immutable records, real-time tracking, tax compliance, and complete transparency using our blockchain-based platform.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/dashboard" className="btn-primary text-base h-12 px-6">
+            <Link to="/dashboard" className="btn-primary text-base h-12 px-6 shadow-medium hover:shadow-strong transition-all">
               Get Started
             </Link>
-            <Link to="/about" className="btn-secondary text-base h-12 px-6 flex items-center justify-center gap-1">
-              Learn More <ChevronRight className="size-4" />
+            <Link to="/tax-compliance" className="btn-secondary text-base h-12 px-6 flex items-center justify-center gap-1">
+              Tax Compliance <ChevronRight className="size-4" />
             </Link>
           </div>
         </div>
 
+        {/* Feature highlights */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 max-w-4xl mx-auto">
+          <div className="bg-white dark:bg-logistics-dark/50 border border-border rounded-xl p-6 shadow-subtle transition-all hover:shadow-medium animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <div className="size-12 bg-logistics-light-blue dark:bg-logistics-blue/10 rounded-lg flex items-center justify-center mb-4">
+              <TrendingUp className="size-6 text-logistics-blue" />
+            </div>
+            <h3 className="text-lg font-semibold mb-2">Real-time Tracking</h3>
+            <p className="text-logistics-gray">Monitor your shipments in real-time with immutable blockchain records</p>
+          </div>
+          
+          <div className="bg-white dark:bg-logistics-dark/50 border border-border rounded-xl p-6 shadow-subtle transition-all hover:shadow-medium animate-fade-in" style={{ animationDelay: '0.4s' }}>
+            <div className="size-12 bg-logistics-light-blue dark:bg-logistics-blue/10 rounded-lg flex items-center justify-center mb-4">
+              <Shield className="size-6 text-logistics-blue" />
+            </div>
+            <h3 className="text-lg font-semibold mb-2">Tax Compliance</h3>
+            <p className="text-logistics-gray">Automated customs duty calculation and compliance documentation</p>
+          </div>
+          
+          <div className="bg-white dark:bg-logistics-dark/50 border border-border rounded-xl p-6 shadow-subtle transition-all hover:shadow-medium animate-fade-in" style={{ animationDelay: '0.6s' }}>
+            <div className="size-12 bg-logistics-light-blue dark:bg-logistics-blue/10 rounded-lg flex items-center justify-center mb-4">
+              <FileText className="size-6 text-logistics-blue" />
+            </div>
+            <h3 className="text-lg font-semibold mb-2">ICEGATE Integration</h3>
+            <p className="text-logistics-gray">Seamless integration with Indian Customs EDI Gateway for documentation</p>
+          </div>
+        </div>
+
         {/* Abstract blockchain visualization */}
-        <div className="relative mt-12 lg:mt-16 max-w-4xl mx-auto animate-fade-in">
+        <div className="relative mt-16 max-w-4xl mx-auto animate-fade-in">
           <div className="aspect-[16/9] bg-white dark:bg-logistics-dark backdrop-blur-md border border-border overflow-hidden rounded-xl shadow-strong relative">
             <div className="absolute inset-0 bg-gradient-to-bl from-logistics-light-blue/20 to-transparent dark:from-logistics-blue/10"></div>
             
@@ -83,7 +110,7 @@ const Hero = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-white/80 to-transparent dark:from-black/50"></div>
             
             <div className="absolute bottom-0 left-0 right-0 text-center p-4">
-              <span className="inline-block px-3 py-1 bg-logistics-blue text-white text-xs font-medium rounded-full">
+              <span className="inline-block px-3 py-1 bg-logistics-blue text-white text-xs font-medium rounded-full shadow-subtle">
                 Powered by GuudzChain Technology
               </span>
             </div>

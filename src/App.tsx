@@ -11,6 +11,8 @@ import Dashboard from "./pages/Dashboard";
 import BlockchainExplorer from "./pages/BlockchainExplorer";
 import About from "./pages/About";
 import Settings from "./pages/Settings";
+import TaxCompliance from "./pages/TaxCompliance";
+import IcegatePage from "./pages/IcegatePage";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +29,11 @@ const App = () => (
           <Route path="/blockchain-explorer" element={<BlockchainExplorer />} />
           <Route path="/about" element={<About />} />
           <Route path="/settings" element={<Settings />} />
+          
+          {/* Tax Compliance Routes */}
+          <Route path="/tax-compliance" element={<TaxCompliance />} />
+          <Route path="/tax-compliance/icegate" element={<IcegatePage />} />
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
