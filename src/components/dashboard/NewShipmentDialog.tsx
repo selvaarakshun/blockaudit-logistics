@@ -51,7 +51,7 @@ const NewShipmentDialog = ({ open, onOpenChange }: NewShipmentDialogProps) => {
       shipmentName: '',
       origin: '',
       destination: '',
-      items: '',
+      items: '', // This should be a string since our schema handles the conversion
       estimatedDelivery: ''
     }
   });
