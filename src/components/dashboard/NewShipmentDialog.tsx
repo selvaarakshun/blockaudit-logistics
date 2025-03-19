@@ -30,8 +30,15 @@ const NewShipmentDialog = ({ open, onOpenChange }: NewShipmentDialogProps) => {
             <Package className="size-5" />
             Create New Shipment
           </DialogTitle>
-          <DialogDescription>
-            Fill in the details to create a new blockchain-verified shipment.
+          <DialogDescription className="text-sm text-muted-foreground mt-1">
+            Fill in the details to create a new blockchain-verified shipment. 
+            All fields are required to ensure proper tracking and verification.
+            <ul className="mt-2 space-y-1 list-disc list-inside text-xs">
+              <li>Enter a descriptive name for easy identification</li>
+              <li>Specify both origin and destination locations</li>
+              <li>Input the number of items being shipped</li>
+              <li>Set the estimated delivery date</li>
+            </ul>
           </DialogDescription>
         </DialogHeader>
         
