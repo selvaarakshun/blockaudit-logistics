@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import AuditTrailPage from "./pages/AuditTrail";
 import Dashboard from "./pages/Dashboard";
 import BlockchainExplorer from "./pages/BlockchainExplorer";
+import BlockchainDashboard from "./pages/BlockchainDashboard";
 import About from "./pages/About";
 import Settings from "./pages/Settings";
 import TaxCompliance from "./pages/TaxCompliance";
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/audit-trail" element={<AuditTrailPage />} />
           <Route path="/blockchain-explorer" element={<BlockchainExplorer />} />
+          <Route path="/blockchain-dashboard" element={<BlockchainDashboard />} />
           <Route path="/about" element={<About />} />
           <Route path="/settings" element={<Settings />} />
           
