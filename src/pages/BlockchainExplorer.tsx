@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Search, Database, Clock, ChevronRight, Shield, BookOpen } from 'lucide-react';
+import { Search, Database, Clock, ChevronRight, Shield, BookOpen, CheckCircle } from 'lucide-react';
 import BlockDetails from '@/components/blockchain/BlockDetails';
 import TransactionsList from '@/components/blockchain/TransactionsList';
 import BlockchainVerification from '@/components/BlockchainVerification';
