@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import BlockchainVerification from '@/components/BlockchainVerification';
+import BlockchainVerification from '@/components/blockchain/verification';
 import { Link } from 'react-router-dom';
 
 const IcegatePage = () => {

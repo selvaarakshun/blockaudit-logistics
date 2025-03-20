@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Database, Clock, FileText, Link as LinkIcon, CheckCircle } from 'lucide-react';
-import BlockchainVerification from '@/components/BlockchainVerification';
+import BlockchainVerification from '@/components/blockchain/verification';
 
 interface Block {
   number: number;
