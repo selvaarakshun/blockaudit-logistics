@@ -1,6 +1,5 @@
-
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import BlockchainVerification from '@/components/BlockchainVerification';
+import BlockchainVerification from '@/components/blockchain/verification';
 
 const RegisteredDocuments = () => {
   return (

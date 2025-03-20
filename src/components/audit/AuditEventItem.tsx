@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Shield, AlertCircle, File, User, Clock, Download, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import BlockchainVerification from '../BlockchainVerification';
+import BlockchainVerification from '../blockchain/verification';
 import { AuditEvent } from '@/types/audit';
 import { toast } from "@/components/ui/use-toast";
 

@@ -1,8 +1,7 @@
-
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Package, ChevronRight, MapPin, Calendar, Tag, Truck } from 'lucide-react';
-import BlockchainVerification from './BlockchainVerification';
+import BlockchainVerification from './blockchain/verification';
 
 interface ShipmentCardProps {
   shipment: {
