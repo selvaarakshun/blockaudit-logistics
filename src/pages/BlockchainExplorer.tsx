@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,6 +13,9 @@ import DocumentSearch from '@/components/blockchain/DocumentSearch';
 import RegisteredDocuments from '@/components/blockchain/RegisteredDocuments';
 import BlockchainStatistics from '@/components/blockchain/BlockchainStatistics';
 import StandardsComplianceCard from '@/components/blockchain/StandardsComplianceCard';
+import HyperledgerFabricConnect from '@/components/blockchain/HyperledgerFabricConnect';
+import InteroperabilityDashboard from '@/components/blockchain/InteroperabilityDashboard';
+import InsuranceCreditDashboard from '@/components/blockchain/InsuranceCreditDashboard';
 
 const BlockchainExplorer = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -19,6 +23,7 @@ const BlockchainExplorer = () => {
   const [activeTab, setActiveTab] = useState('transactions');
   const [documentId, setDocumentId] = useState('');
   const [hasDocumentSearch, setHasDocumentSearch] = useState(false);
+  const [advancedFeatureTab, setAdvancedFeatureTab] = useState('interoperability');
   
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -60,11 +65,12 @@ const BlockchainExplorer = () => {
               onValueChange={setActiveTab} 
               className="w-full"
             >
-              <TabsList className="grid grid-cols-4 w-full">
+              <TabsList className="grid grid-cols-5 w-full">
                 <TabsTrigger value="transactions">Transactions</TabsTrigger>
                 <TabsTrigger value="blocks">Blocks</TabsTrigger>
                 <TabsTrigger value="documents">Documents</TabsTrigger>
                 <TabsTrigger value="statistics">Statistics</TabsTrigger>
+                <TabsTrigger value="advanced">Advanced</TabsTrigger>
               </TabsList>
               
               <TabsContent value="transactions" className="space-y-4 mt-4">
@@ -89,6 +95,33 @@ const BlockchainExplorer = () => {
               
               <TabsContent value="statistics" className="space-y-4 mt-4">
                 <BlockchainStatistics />
+              </TabsContent>
+              
+              <TabsContent value="advanced" className="space-y-4 mt-4">
+                <Tabs 
+                  defaultValue="interoperability" 
+                  value={advancedFeatureTab} 
+                  onValueChange={setAdvancedFeatureTab} 
+                  className="w-full"
+                >
+                  <TabsList className="grid grid-cols-3 w-full">
+                    <TabsTrigger value="interoperability">Interoperability</TabsTrigger>
+                    <TabsTrigger value="hyperledger">Hyperledger Fabric</TabsTrigger>
+                    <TabsTrigger value="insurance">Insurance & Credit</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="interoperability" className="space-y-4 mt-4">
+                    <InteroperabilityDashboard />
+                  </TabsContent>
+                  
+                  <TabsContent value="hyperledger" className="space-y-4 mt-4">
+                    <HyperledgerFabricConnect />
+                  </TabsContent>
+                  
+                  <TabsContent value="insurance" className="space-y-4 mt-4">
+                    <InsuranceCreditDashboard />
+                  </TabsContent>
+                </Tabs>
               </TabsContent>
             </Tabs>
           </div>

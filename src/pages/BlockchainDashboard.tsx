@@ -9,13 +9,18 @@ import BlockDetails from '@/components/blockchain/BlockDetails';
 import DocumentSearch from '@/components/blockchain/DocumentSearch';
 import RegisteredDocuments from '@/components/blockchain/RegisteredDocuments';
 import BlockchainStatistics from '@/components/blockchain/BlockchainStatistics';
-import { Database, FileText, Blocks, BarChart3 } from 'lucide-react';
+import InteroperabilityDashboard from '@/components/blockchain/InteroperabilityDashboard';
+import HyperledgerFabricConnect from '@/components/blockchain/HyperledgerFabricConnect';
+import InsuranceCreditDashboard from '@/components/blockchain/InsuranceCreditDashboard';
+import { Database, FileText, Blocks, BarChart3, Network, Server, ShieldCheck } from 'lucide-react';
 
 const BlockchainDashboard = () => {
   const [documentId, setDocumentId] = useState('');
+  const [activeTab, setActiveTab] = useState('transactions');
 
   const handleDocumentSearch = (docId: string) => {
     setDocumentId(docId);
+    setActiveTab('documents');
   };
 
   return (
@@ -37,8 +42,8 @@ const BlockchainDashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Content Area - 2/3 width on large screens */}
           <div className="lg:col-span-2 space-y-6">
-            <Tabs defaultValue="transactions" className="w-full">
-              <TabsList className="grid grid-cols-4 w-full">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid grid-cols-7 w-full">
                 <TabsTrigger value="transactions" className="flex items-center gap-2">
                   <Database className="h-4 w-4" />
                   <span className="hidden sm:inline">Transactions</span>
@@ -54,6 +59,18 @@ const BlockchainDashboard = () => {
                 <TabsTrigger value="analytics" className="flex items-center gap-2">
                   <BarChart3 className="h-4 w-4" />
                   <span className="hidden sm:inline">Analytics</span>
+                </TabsTrigger>
+                <TabsTrigger value="interop" className="flex items-center gap-2">
+                  <Network className="h-4 w-4" />
+                  <span className="hidden sm:inline">Interop</span>
+                </TabsTrigger>
+                <TabsTrigger value="hyperledger" className="flex items-center gap-2">
+                  <Server className="h-4 w-4" />
+                  <span className="hidden sm:inline">Fabric</span>
+                </TabsTrigger>
+                <TabsTrigger value="insurance" className="flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4" />
+                  <span className="hidden sm:inline">Insurance</span>
                 </TabsTrigger>
               </TabsList>
               
@@ -83,6 +100,18 @@ const BlockchainDashboard = () => {
                     <div className="text-logistics-gray">Analytics visualizations would be displayed here</div>
                   </CardContent>
                 </Card>
+              </TabsContent>
+              
+              <TabsContent value="interop" className="space-y-4 mt-4">
+                <InteroperabilityDashboard />
+              </TabsContent>
+              
+              <TabsContent value="hyperledger" className="space-y-4 mt-4">
+                <HyperledgerFabricConnect />
+              </TabsContent>
+              
+              <TabsContent value="insurance" className="space-y-4 mt-4">
+                <InsuranceCreditDashboard />
               </TabsContent>
             </Tabs>
           </div>
