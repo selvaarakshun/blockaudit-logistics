@@ -8,6 +8,7 @@ import TransactionsList from '@/components/blockchain/TransactionsList';
 import SearchResults from '@/components/blockchain/SearchResults';
 import SmartContractForm from '@/components/blockchain/SmartContractForm';
 import BlockchainSearch from '@/components/blockchain/BlockchainSearch';
+import DocumentSearch from '@/components/blockchain/DocumentSearch';
 import RegisteredDocuments from '@/components/blockchain/RegisteredDocuments';
 import BlockchainStatistics from '@/components/blockchain/BlockchainStatistics';
 import StandardsComplianceCard from '@/components/blockchain/StandardsComplianceCard';
@@ -16,10 +17,20 @@ const BlockchainExplorer = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [hasSearched, setHasSearched] = useState(false);
   const [activeTab, setActiveTab] = useState('transactions');
+  const [documentId, setDocumentId] = useState('');
+  const [hasDocumentSearch, setHasDocumentSearch] = useState(false);
   
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     setHasSearched(true);
+    setHasDocumentSearch(false); // Reset document search when doing regular search
+  };
+
+  const handleDocumentSearch = (docId: string) => {
+    setDocumentId(docId);
+    setHasDocumentSearch(true);
+    setHasSearched(false); // Reset regular search when doing document search
+    setActiveTab('documents'); // Switch to documents tab
   };
 
   return (
@@ -30,11 +41,14 @@ const BlockchainExplorer = () => {
         <div className="flex flex-col gap-4">
           <h1 className="text-3xl font-bold">GuudzChain Explorer</h1>
           <p className="text-logistics-gray">
-            Search for transactions, blocks, and addresses on the blockchain. Register and verify logistics documents following international standards.
+            Search for transactions, blocks, addresses on the blockchain, or find registered logistics documents by ID.
           </p>
         </div>
 
-        <BlockchainSearch onSearch={handleSearch} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <BlockchainSearch onSearch={handleSearch} />
+          <DocumentSearch onSearch={handleDocumentSearch} />
+        </div>
 
         {hasSearched && <SearchResults query={searchQuery} />}
         
@@ -62,7 +76,15 @@ const BlockchainExplorer = () => {
               </TabsContent>
               
               <TabsContent value="documents" className="space-y-4 mt-4">
-                <RegisteredDocuments />
+                {hasDocumentSearch ? (
+                  <Card>
+                    <CardContent className="pt-6">
+                      <RegisteredDocuments filteredDocId={documentId} />
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <RegisteredDocuments />
+                )}
               </TabsContent>
               
               <TabsContent value="statistics" className="space-y-4 mt-4">
