@@ -1,13 +1,16 @@
-
 import { useState } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/use-toast';
 import { ArrowRightLeft, Loader2 } from 'lucide-react';
-import { transferAsset, availableNetworks, getCrossChainFeeEstimate } from '@/utils/interoperabilityUtils';
+import { transferAsset, availableNetworks, getCrossChainFeeEstimate, CrossChainTransaction } from '@/utils/interoperabilityUtils';
 
-const AssetTransfer = () => {
+interface AssetTransferProps {
+  onTransactionCreated?: (transaction: CrossChainTransaction) => void;
+}
+
+const AssetTransfer = ({ onTransactionCreated }: AssetTransferProps) => {
   const [sourceNetwork, setSourceNetwork] = useState('guudzchain');
   const [targetNetwork, setTargetNetwork] = useState('');
   const [assetType, setAssetType] = useState('document');
@@ -54,6 +57,11 @@ const AssetTransfer = () => {
         title: "Transfer Successful",
         description: `Asset transferred from ${sourceNetwork} to ${targetNetwork}`,
       });
+      
+      // Call the callback if provided
+      if (onTransactionCreated) {
+        onTransactionCreated(result);
+      }
       
       // Reset form
       setAssetId('');

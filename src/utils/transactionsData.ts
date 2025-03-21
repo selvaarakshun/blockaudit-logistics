@@ -22,7 +22,7 @@ export const generateMockTransactions = (count: number = 10): CrossChainTransact
       sourceChain: blockchains[sourceIndex],
       targetChain: blockchains[targetIndex],
       assetType: assetTypes[Math.floor(Math.random() * assetTypes.length)],
-      amount: Math.floor(Math.random() * 1000) / 100,
+      amount: (Math.floor(Math.random() * 1000) / 100).toString(), // Convert to string to match the CrossChainTransaction type
       status: statuses[Math.floor(Math.random() * statuses.length)],
       timestamp: new Date(Date.now() - Math.floor(Math.random() * 86400000 * 7)).toISOString(),
       hash: `0x${Math.random().toString(36).substring(2, 10)}${Math.random().toString(36).substring(2, 10)}`
