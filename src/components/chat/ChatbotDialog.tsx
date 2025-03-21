@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Bot, X, Send, ChevronDown, ChevronUp, MessageSquare, Mic, MicOff, Zap } from 'lucide-react';
@@ -12,6 +13,44 @@ interface Message {
   content: string;
   sender: 'user' | 'bot';
   timestamp: Date;
+}
+
+// Define our WebkitSpeechRecognition type
+interface SpeechRecognitionEvent extends Event {
+  results: {
+    [index: number]: {
+      [index: number]: {
+        transcript: string;
+      };
+    };
+  };
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start: () => void;
+  stop: () => void;
+  abort: () => void;
+  onresult: (event: SpeechRecognitionEvent) => void;
+  onerror: (event: SpeechRecognitionErrorEvent) => void;
+  onend: () => void;
+}
+
+// Define our global speech recognition constructor
+interface SpeechRecognitionConstructor {
+  new (): SpeechRecognition;
+}
+
+// Define window with our WebkitSpeechRecognition
+interface CustomWindow extends Window {
+  SpeechRecognition?: SpeechRecognitionConstructor;
+  webkitSpeechRecognition?: SpeechRecognitionConstructor;
 }
 
 const mockResponses: Record<string, string> = {
@@ -35,7 +74,7 @@ const ChatbotDialog = () => {
   const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const speechSynthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   useEffect(() => {
     try {
@@ -68,30 +107,34 @@ const ChatbotDialog = () => {
       }
     }
 
-    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = false;
-      recognitionRef.current.interimResults = false;
-      
-      recognitionRef.current.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
-        setInputValue(transcript);
-        setTimeout(() => handleSendMessage(), 500);
-      };
-      
-      recognitionRef.current.onerror = (event: any) => {
-        console.error('Speech recognition error', event.error);
-        setIsListening(false);
-        toast({
-          title: "Voice recognition error",
-          description: "Could not recognize your voice. Please try again or type your message.",
-        });
-      };
-      
-      recognitionRef.current.onend = () => {
-        setIsListening(false);
-      };
+    // Safely check and initialize speech recognition
+    const customWindow = window as CustomWindow;
+    if (customWindow.SpeechRecognition || customWindow.webkitSpeechRecognition) {
+      const SpeechRecognitionConstructor = customWindow.SpeechRecognition || customWindow.webkitSpeechRecognition;
+      if (SpeechRecognitionConstructor) {
+        recognitionRef.current = new SpeechRecognitionConstructor();
+        recognitionRef.current.continuous = false;
+        recognitionRef.current.interimResults = false;
+        
+        recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
+          const transcript = event.results[0][0].transcript;
+          setInputValue(transcript);
+          setTimeout(() => handleSendMessage(), 500);
+        };
+        
+        recognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
+          console.error('Speech recognition error', event.error);
+          setIsListening(false);
+          toast({
+            title: "Voice recognition error",
+            description: "Could not recognize your voice. Please try again or type your message.",
+          });
+        };
+        
+        recognitionRef.current.onend = () => {
+          setIsListening(false);
+        };
+      }
     }
 
     speechSynthesisRef.current = new SpeechSynthesisUtterance();

@@ -6,7 +6,7 @@ import { toast } from '@/components/ui/use-toast';
 import { connectToNetwork, availableNetworks, recentCrossChainTransactions } from '@/utils/interoperabilityUtils';
 import TransactionsList from './TransactionsList';
 
-interface NetworksListProps {
+export interface NetworksListProps {
   selectedNetwork: string;
   setSelectedNetwork: (network: string) => void;
 }

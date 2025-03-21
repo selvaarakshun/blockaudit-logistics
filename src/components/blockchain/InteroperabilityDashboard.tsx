@@ -16,6 +16,7 @@ const InteroperabilityDashboard = () => {
   const [transactions, setTransactions] = useState<CrossChainTransaction[]>([]);
   const [activeTab, setActiveTab] = useState('transactions');
   const [showAnimation, setShowAnimation] = useState(true);
+  const [selectedNetwork, setSelectedNetwork] = useState<string>('');
 
   useEffect(() => {
     const storedTransactions = getStoredTransactions();
@@ -81,11 +82,16 @@ const InteroperabilityDashboard = () => {
           </TabsContent>
           
           <TabsContent value="networks" className="mt-0">
-            <NetworksList />
+            <NetworksList 
+              selectedNetwork={selectedNetwork} 
+              setSelectedNetwork={setSelectedNetwork} 
+            />
           </TabsContent>
           
           <TabsContent value="transfer" className="mt-0">
-            <AssetTransfer onTransactionCreated={handleNewTransaction} />
+            <AssetTransfer 
+              onTransactionCreated={handleNewTransaction} 
+            />
           </TabsContent>
           
           <TabsContent value="documents" className="mt-0">
