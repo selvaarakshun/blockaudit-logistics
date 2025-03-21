@@ -15,6 +15,7 @@ import About from "./pages/About";
 import Settings from "./pages/Settings";
 import TaxCompliance from "./pages/TaxCompliance";
 import IcegatePage from "./pages/IcegatePage";
+import ChatbotDialog from "./components/chat/ChatbotDialog";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +54,9 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        
+        {/* Global chatbot that appears on all pages */}
+        <ChatbotDialog />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
