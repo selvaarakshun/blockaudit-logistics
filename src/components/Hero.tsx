@@ -1,5 +1,5 @@
 
-import { ChevronRight, TrendingUp, Shield, FileText } from 'lucide-react';
+import { ChevronRight, TrendingUp, Shield, FileText, Star, Award, Zap, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Hero = () => {
@@ -63,12 +63,12 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Abstract blockchain visualization */}
+        {/* Enhanced blockchain visualization */}
         <div className="relative mt-16 max-w-4xl mx-auto animate-fade-in">
-          <div className="aspect-[16/9] bg-white dark:bg-logistics-dark backdrop-blur-md border border-border overflow-hidden rounded-xl shadow-strong relative">
+          <div className="aspect-[16/9] bg-white dark:bg-logistics-dark/90 backdrop-blur-md border border-border overflow-hidden rounded-xl shadow-strong relative">
             <div className="absolute inset-0 bg-gradient-to-bl from-logistics-light-blue/20 to-transparent dark:from-logistics-blue/10"></div>
             
-            {/* Blockchain node visualizations */}
+            {/* Enhanced blockchain node visualizations */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="grid grid-cols-3 gap-4 sm:gap-8 lg:gap-12 px-6 py-8 w-full h-full">
                 {[...Array(6)].map((_, i) => (
@@ -78,7 +78,7 @@ const Hero = () => {
                       left: `${20 + Math.random() * 60}%`,
                     }}></div>
                     
-                    {/* Connection lines */}
+                    {/* Connection lines with animation */}
                     {i < 5 && (
                       <div className="absolute h-0.5 bg-logistics-blue/20 transform rotate-45" style={{
                         width: '100%',
@@ -91,8 +91,41 @@ const Hero = () => {
               </div>
             </div>
             
+            {/* Credit Scores & Insurance panel */}
+            <div className="absolute top-4 left-4 right-4 bg-white/80 dark:bg-logistics-dark/80 backdrop-blur-sm rounded-lg border border-border p-3 flex flex-wrap gap-4">
+              <div className="flex items-center gap-2">
+                <div className="size-8 bg-logistics-light-blue/30 dark:bg-logistics-blue/20 rounded-full flex items-center justify-center">
+                  <Star className="size-4 text-logistics-blue" />
+                </div>
+                <div>
+                  <div className="text-xs text-logistics-gray">Credit Score</div>
+                  <div className="text-sm font-semibold">85 / 100</div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <div className="size-8 bg-logistics-light-blue/30 dark:bg-logistics-blue/20 rounded-full flex items-center justify-center">
+                  <Shield className="size-4 text-logistics-blue" />
+                </div>
+                <div>
+                  <div className="text-xs text-logistics-gray">Insurance</div>
+                  <div className="text-sm font-semibold">Available</div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <div className="size-8 bg-logistics-light-blue/30 dark:bg-logistics-blue/20 rounded-full flex items-center justify-center">
+                  <Zap className="size-4 text-logistics-blue" />
+                </div>
+                <div>
+                  <div className="text-xs text-logistics-gray">Transactions</div>
+                  <div className="text-sm font-semibold">128 Verified</div>
+                </div>
+              </div>
+            </div>
+            
             {/* Animated blocks */}
-            <div className="absolute bottom-4 left-4 right-4 h-16 flex gap-2 overflow-hidden">
+            <div className="absolute bottom-16 left-4 right-4 h-16 flex gap-2 overflow-hidden">
               {[...Array(8)].map((_, i) => (
                 <div 
                   key={i}
@@ -106,13 +139,17 @@ const Hero = () => {
               ))}
             </div>
             
-            {/* Overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-white/80 to-transparent dark:from-black/50"></div>
-            
-            <div className="absolute bottom-0 left-0 right-0 text-center p-4">
-              <span className="inline-block px-3 py-1 bg-logistics-blue text-white text-xs font-medium rounded-full shadow-subtle">
-                Powered by GuudzChain Technology
-              </span>
+            {/* Redesigned GuudzChain Technology box */}
+            <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center">
+              <div className="bg-logistics-blue/90 text-white px-4 py-2 rounded-lg shadow-strong flex items-center gap-2 backdrop-blur-sm">
+                <Award className="size-5" />
+                <span className="font-medium">Powered by GuudzChain Technology</span>
+              </div>
+              
+              <Link to="/blockchain-explorer" className="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg shadow-medium flex items-center gap-1 transition-colors">
+                Explorer
+                <ArrowRight className="size-4" />
+              </Link>
             </div>
           </div>
         </div>
