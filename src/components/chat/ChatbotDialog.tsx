@@ -1,7 +1,6 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Bot, X, Send, ChevronDown, ChevronUp, MessageSquare, Zap } from 'lucide-react';
+import { Bot, X, Send, ChevronDown, ChevronUp, MessageSquare, Mic, MicOff, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
@@ -24,29 +23,95 @@ const mockResponses: Record<string, string> = {
   "": "I'm here to help with all your blockchain needs. Just ask me about Hyperledger Fabric, smart contracts, interoperability, or any other blockchain-related questions!"
 };
 
+const CHAT_HISTORY_KEY = 'blockchain-assistant-chat-history';
+
 const ChatbotDialog = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const speechSynthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const recognitionRef = useRef<any>(null);
 
-  // Add initial bot message when component mounts
   useEffect(() => {
-    if (messages.length === 0) {
-      setMessages([
-        {
+    try {
+      const savedMessages = localStorage.getItem(CHAT_HISTORY_KEY);
+      if (savedMessages) {
+        const parsedMessages: Message[] = JSON.parse(savedMessages).map((msg: any) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp)
+        }));
+        setMessages(parsedMessages);
+      } else if (messages.length === 0) {
+        const initialMessage: Message = {
           id: crypto.randomUUID(),
           content: "Welcome to GuudzChain Assistant! I can help you with blockchain operations, Hyperledger Fabric, smart contracts, and cross-chain interoperability. What would you like to know?",
           sender: 'bot',
           timestamp: new Date()
-        }
-      ]);
+        };
+        setMessages([initialMessage]);
+        localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify([initialMessage]));
+      }
+    } catch (error) {
+      console.error('Error loading chat history:', error);
+      if (messages.length === 0) {
+        setMessages([{
+          id: crypto.randomUUID(),
+          content: "Welcome to GuudzChain Assistant! I can help you with blockchain operations, Hyperledger Fabric, smart contracts, and cross-chain interoperability. What would you like to know?",
+          sender: 'bot',
+          timestamp: new Date()
+        }]);
+      }
     }
+
+    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = false;
+      
+      recognitionRef.current.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setInputValue(transcript);
+        setTimeout(() => handleSendMessage(), 500);
+      };
+      
+      recognitionRef.current.onerror = (event: any) => {
+        console.error('Speech recognition error', event.error);
+        setIsListening(false);
+        toast({
+          title: "Voice recognition error",
+          description: "Could not recognize your voice. Please try again or type your message.",
+        });
+      };
+      
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+    }
+
+    speechSynthesisRef.current = new SpeechSynthesisUtterance();
+    
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.abort();
+      }
+      if (window.speechSynthesis && speechSynthesisRef.current) {
+        window.speechSynthesis.cancel();
+      }
+    };
   }, []);
 
-  // Scroll to bottom whenever messages change
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(messages));
+    }
+  }, [messages]);
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -54,7 +119,6 @@ const ChatbotDialog = () => {
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
 
-    // Add user message
     const userMessage: Message = {
       id: crypto.randomUUID(),
       content: inputValue,
@@ -66,11 +130,9 @@ const ChatbotDialog = () => {
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate bot response after a short delay
     setTimeout(() => {
       let botResponse = "I'm not sure how to respond to that. Could you try asking about Hyperledger Fabric, blockchain interoperability, or smart contracts?";
       
-      // Check for keywords in user input
       const lowerCaseInput = inputValue.toLowerCase();
       for (const [keyword, response] of Object.entries(mockResponses)) {
         if (keyword && lowerCaseInput.includes(keyword)) {
@@ -88,7 +150,56 @@ const ChatbotDialog = () => {
       
       setMessages(prev => [...prev, botMessage]);
       setIsTyping(false);
-    }, 1000 + Math.random() * 1000); // Random delay between 1-2 seconds
+
+      if (isVoiceEnabled && speechSynthesisRef.current) {
+        speechSynthesisRef.current.text = botResponse;
+        const voices = window.speechSynthesis.getVoices();
+        const femaleVoice = voices.find(voice => voice.name.includes('Female') || voice.name.includes('Google UK English Female'));
+        if (femaleVoice) {
+          speechSynthesisRef.current.voice = femaleVoice;
+        }
+        window.speechSynthesis.speak(speechSynthesisRef.current);
+      }
+    }, 1000 + Math.random() * 1000);
+  };
+
+  const toggleVoice = () => {
+    if (!isVoiceEnabled && window.speechSynthesis) {
+      window.speechSynthesis.getVoices();
+    }
+    
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    
+    setIsVoiceEnabled(!isVoiceEnabled);
+    toast({
+      title: isVoiceEnabled ? "Voice response disabled" : "Voice response enabled",
+      description: isVoiceEnabled ? "Bot will no longer speak responses." : "Bot will now speak responses to you.",
+    });
+  };
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) {
+      toast({
+        title: "Speech recognition not supported",
+        description: "Your browser doesn't support speech recognition. Please type your message instead.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current.abort();
+      setIsListening(false);
+    } else {
+      setIsListening(true);
+      recognitionRef.current.start();
+      toast({
+        title: "Listening...",
+        description: "Speak your message clearly.",
+      });
+    }
   };
 
   const toggleMinimize = () => {
@@ -102,9 +213,23 @@ const ChatbotDialog = () => {
     }
   };
 
+  const clearChat = () => {
+    const welcomeMessage = {
+      id: crypto.randomUUID(),
+      content: "Welcome to GuudzChain Assistant! I can help you with blockchain operations, Hyperledger Fabric, smart contracts, and cross-chain interoperability. What would you like to know?",
+      sender: 'bot' as const,
+      timestamp: new Date()
+    };
+    setMessages([welcomeMessage]);
+    localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify([welcomeMessage]));
+    toast({
+      title: "Chat history cleared",
+      description: "Your conversation has been reset.",
+    });
+  };
+
   return (
     <>
-      {/* Floating button to open chat */}
       {!isOpen && (
         <motion.div
           className="fixed bottom-6 right-6 z-50"
@@ -122,7 +247,6 @@ const ChatbotDialog = () => {
         </motion.div>
       )}
 
-      {/* Chat dialog */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -133,13 +257,21 @@ const ChatbotDialog = () => {
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
           >
             <Card className="border-2 border-blue-200 shadow-xl overflow-hidden">
-              {/* Header */}
               <div className="bg-blue-600 text-white p-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Bot className="h-5 w-5" />
                   <span className="font-medium">Blockchain Assistant</span>
                 </div>
                 <div className="flex items-center gap-1">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-7 w-7 text-white hover:bg-blue-500 rounded-full"
+                    onClick={toggleVoice}
+                    title={isVoiceEnabled ? "Disable voice responses" : "Enable voice responses"}
+                  >
+                    {isVoiceEnabled ? <Zap className="h-4 w-4" /> : <Zap className="h-4 w-4 opacity-50" />}
+                  </Button>
                   <Button 
                     variant="ghost" 
                     size="icon" 
@@ -159,7 +291,6 @@ const ChatbotDialog = () => {
                 </div>
               </div>
 
-              {/* Chat messages */}
               <AnimatePresence>
                 {!isMinimized && (
                   <motion.div
@@ -209,7 +340,6 @@ const ChatbotDialog = () => {
                         <div ref={messagesEndRef} />
                       </div>
 
-                      {/* Input */}
                       <div className="p-3 bg-white dark:bg-gray-800 border-t">
                         <form 
                           className="flex gap-2" 
@@ -223,43 +353,66 @@ const ChatbotDialog = () => {
                             onChange={(e) => setInputValue(e.target.value)}
                             placeholder="Ask about blockchain..."
                             className="flex-1"
+                            disabled={isListening}
                           />
+                          <Button
+                            type="button"
+                            size="icon"
+                            disabled={isTyping}
+                            className={cn(
+                              "text-white",
+                              isListening ? "bg-red-500 hover:bg-red-600" : "bg-blue-500 hover:bg-blue-600"
+                            )}
+                            onClick={toggleListening}
+                          >
+                            {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                          </Button>
                           <Button 
                             type="submit"
                             size="icon" 
-                            disabled={isTyping || !inputValue.trim()}
+                            disabled={isTyping || !inputValue.trim() || isListening}
                             className={cn(
                               "bg-blue-600 hover:bg-blue-700 text-white",
-                              isTyping && "opacity-50 cursor-not-allowed"
+                              (isTyping || !inputValue.trim() || isListening) && "opacity-50 cursor-not-allowed"
                             )}
                           >
                             <Send className="h-4 w-4" />
                           </Button>
                         </form>
-                        <div className="flex gap-2 mt-2 overflow-x-auto py-1">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="text-xs py-1 h-7 whitespace-nowrap"
-                            onClick={() => setInputValue("How to use Hyperledger Fabric?")}
+                        <div className="flex justify-between mt-2">
+                          <div className="flex gap-2 overflow-x-auto py-1">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="text-xs py-1 h-7 whitespace-nowrap"
+                              onClick={() => setInputValue("How to use Hyperledger Fabric?")}
+                            >
+                              Hyperledger Fabric
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="text-xs py-1 h-7 whitespace-nowrap"
+                              onClick={() => setInputValue("Tell me about blockchain interoperability")}
+                            >
+                              Interoperability
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="text-xs py-1 h-7 whitespace-nowrap"
+                              onClick={() => setInputValue("Deploy a smart contract")}
+                            >
+                              Smart Contracts
+                            </Button>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-xs text-gray-500 h-7"
+                            onClick={clearChat}
                           >
-                            Hyperledger Fabric
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="text-xs py-1 h-7 whitespace-nowrap"
-                            onClick={() => setInputValue("Tell me about blockchain interoperability")}
-                          >
-                            Interoperability
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="text-xs py-1 h-7 whitespace-nowrap"
-                            onClick={() => setInputValue("Deploy a smart contract")}
-                          >
-                            Smart Contracts
+                            Clear
                           </Button>
                         </div>
                       </div>
