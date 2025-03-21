@@ -15,7 +15,8 @@ import BlockchainStatistics from '@/components/blockchain/BlockchainStatistics';
 import StandardsComplianceCard from '@/components/blockchain/StandardsComplianceCard';
 import HyperledgerFabricConnect from '@/components/blockchain/HyperledgerFabricConnect';
 import InteroperabilityDashboard from '@/components/blockchain/InteroperabilityDashboard';
-import InsuranceCreditDashboard from '@/components/blockchain/InsuranceCreditDashboard';
+import InsuranceSmartContract from '@/components/blockchain/InsuranceSmartContract';
+import SmartContractDeploy from '@/components/blockchain/SmartContractDeploy';
 
 const BlockchainExplorer = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -39,14 +40,14 @@ const BlockchainExplorer = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       <Navbar />
       
-      <div className="container py-6 space-y-8 mt-16 flex-grow">
-        <div className="flex flex-col gap-4">
-          <h1 className="text-3xl font-bold">GuudzChain Explorer</h1>
-          <p className="text-logistics-gray">
-            Search for transactions, blocks, addresses on the blockchain, or find registered logistics documents by ID.
+      <div className="container py-6 space-y-6 mt-16 flex-grow">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-2xl font-bold">GuudzChain Explorer</h1>
+          <p className="text-gray-500 dark:text-gray-400">
+            Search, explore, and interact with blockchain data and smart contracts
           </p>
         </div>
 
@@ -57,15 +58,15 @@ const BlockchainExplorer = () => {
 
         {hasSearched && <SearchResults query={searchQuery} />}
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
             <Tabs 
               defaultValue="transactions" 
               value={activeTab} 
               onValueChange={setActiveTab} 
               className="w-full"
             >
-              <TabsList className="grid grid-cols-5 w-full">
+              <TabsList className="w-full grid grid-cols-5">
                 <TabsTrigger value="transactions">Transactions</TabsTrigger>
                 <TabsTrigger value="blocks">Blocks</TabsTrigger>
                 <TabsTrigger value="documents">Documents</TabsTrigger>
@@ -73,15 +74,23 @@ const BlockchainExplorer = () => {
                 <TabsTrigger value="advanced">Advanced</TabsTrigger>
               </TabsList>
               
-              <TabsContent value="transactions" className="space-y-4 mt-4">
-                <TransactionsList />
+              <TabsContent value="transactions" className="mt-4">
+                <Card>
+                  <CardContent className="pt-6">
+                    <TransactionsList />
+                  </CardContent>
+                </Card>
               </TabsContent>
               
-              <TabsContent value="blocks" className="space-y-4 mt-4">
-                <BlockDetails />
+              <TabsContent value="blocks" className="mt-4">
+                <Card>
+                  <CardContent className="pt-6">
+                    <BlockDetails />
+                  </CardContent>
+                </Card>
               </TabsContent>
               
-              <TabsContent value="documents" className="space-y-4 mt-4">
+              <TabsContent value="documents" className="mt-4">
                 {hasDocumentSearch ? (
                   <Card>
                     <CardContent className="pt-6">
@@ -93,11 +102,11 @@ const BlockchainExplorer = () => {
                 )}
               </TabsContent>
               
-              <TabsContent value="statistics" className="space-y-4 mt-4">
+              <TabsContent value="statistics" className="mt-4">
                 <BlockchainStatistics />
               </TabsContent>
               
-              <TabsContent value="advanced" className="space-y-4 mt-4">
+              <TabsContent value="advanced" className="mt-4">
                 <Tabs 
                   defaultValue="interoperability" 
                   value={advancedFeatureTab} 
@@ -106,20 +115,20 @@ const BlockchainExplorer = () => {
                 >
                   <TabsList className="grid grid-cols-3 w-full">
                     <TabsTrigger value="interoperability">Interoperability</TabsTrigger>
-                    <TabsTrigger value="hyperledger">Hyperledger Fabric</TabsTrigger>
-                    <TabsTrigger value="insurance">Insurance & Credit</TabsTrigger>
+                    <TabsTrigger value="hyperledger">Hyperledger</TabsTrigger>
+                    <TabsTrigger value="insurance">Insurance</TabsTrigger>
                   </TabsList>
                   
-                  <TabsContent value="interoperability" className="space-y-4 mt-4">
+                  <TabsContent value="interoperability" className="mt-4">
                     <InteroperabilityDashboard />
                   </TabsContent>
                   
-                  <TabsContent value="hyperledger" className="space-y-4 mt-4">
+                  <TabsContent value="hyperledger" className="mt-4">
                     <HyperledgerFabricConnect />
                   </TabsContent>
                   
-                  <TabsContent value="insurance" className="space-y-4 mt-4">
-                    <InsuranceCreditDashboard />
+                  <TabsContent value="insurance" className="mt-4">
+                    <InsuranceSmartContract />
                   </TabsContent>
                 </Tabs>
               </TabsContent>
@@ -132,6 +141,8 @@ const BlockchainExplorer = () => {
                 setActiveTab('documents');
               }}
             />
+            
+            <SmartContractDeploy />
             
             <StandardsComplianceCard />
           </div>

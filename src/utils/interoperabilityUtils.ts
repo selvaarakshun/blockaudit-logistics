@@ -83,6 +83,9 @@ export const recentCrossChainTransactions: CrossChainTransaction[] = [
   }
 ];
 
+/**
+ * Connect to a blockchain network
+ */
 export const connectToNetwork = async (networkId: string): Promise<BlockchainNetwork | null> => {
   // In a real implementation, this would use the appropriate SDK to connect to the network
   console.log(`Connecting to network: ${networkId}`);
@@ -99,6 +102,9 @@ export const connectToNetwork = async (networkId: string): Promise<BlockchainNet
   return network;
 };
 
+/**
+ * Transfer an asset between blockchain networks
+ */
 export const transferAsset = async (
   sourceNetworkId: string, 
   targetNetworkId: string,
@@ -122,6 +128,9 @@ export const transferAsset = async (
   };
 };
 
+/**
+ * Verify a document hash across multiple blockchain networks
+ */
 export const verifyDocumentAcrossChains = async (documentHash: string): Promise<Record<string, boolean>> => {
   console.log(`Verifying document across chains: ${documentHash}`);
   
@@ -132,7 +141,50 @@ export const verifyDocumentAcrossChains = async (documentHash: string): Promise<
   return {
     'guudzchain': true,
     'hyperledger': true,
-    'ethereum': false,
-    'binance': false
+    'ethereum': documentHash.startsWith('0x'),
+    'binance': documentHash.length > 20
+  };
+};
+
+/**
+ * Get supported interoperability protocols for a network
+ */
+export const getSupportedProtocols = async (networkId: string): Promise<string[]> => {
+  // In a real implementation, this would query the network for supported protocols
+  const protocolMap: Record<string, string[]> = {
+    'ethereum': ['IBC', 'Chainlink CCIP', 'Layerzero'],
+    'binance': ['BEP-20', 'Cross-Chain Bridge', 'Layerzero'],
+    'hyperledger': ['Cactus', 'Weaver', 'Custom Relayers'],
+    'guudzchain': ['All Protocols', 'Custom Bridges', 'Atomic Swaps']
+  };
+  
+  return protocolMap[networkId] || ['Unknown'];
+};
+
+/**
+ * Get fee estimate for cross-chain transfer
+ */
+export const getCrossChainFeeEstimate = async (
+  sourceNetworkId: string,
+  targetNetworkId: string,
+  assetType: string
+): Promise<{ fee: string; currency: string; estimatedTime: string }> => {
+  // In a real implementation, this would calculate actual cross-chain fees
+  
+  // Mock fee data
+  const feeMap: Record<string, number> = {
+    'ethereum': 0.005,
+    'binance': 0.001,
+    'hyperledger': 0,
+    'guudzchain': 0.0001
+  };
+  
+  const fee = feeMap[sourceNetworkId] || 0.002;
+  
+  return {
+    fee: fee.toString(),
+    currency: sourceNetworkId === 'ethereum' ? 'ETH' : 
+              sourceNetworkId === 'binance' ? 'BNB' : 'USD',
+    estimatedTime: sourceNetworkId === 'hyperledger' ? '10 seconds' : '2 minutes'
   };
 };
