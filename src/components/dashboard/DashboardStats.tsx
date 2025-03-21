@@ -1,54 +1,70 @@
 
-import { ArrowUpRight, ArrowDownRight, TrendingUp, Clock } from 'lucide-react';
+import { Package, Truck, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Shipment } from '@/pages/Dashboard';
 
-const DashboardStats = () => {
+interface DashboardStatsProps {
+  shipments: Shipment[];
+}
+
+const DashboardStats = ({ shipments = [] }: DashboardStatsProps) => {
+  // Calculate stats from shipments
+  const total = shipments.length;
+  const inTransit = shipments.filter(s => s.status === 'in-transit').length;
+  const delivered = shipments.filter(s => s.status === 'delivered').length;
+  const pending = shipments.filter(s => s.status === 'pending').length;
+  const delayed = shipments.filter(s => s.status === 'delayed').length;
+
   const stats = [
     {
-      icon: <ArrowUpRight className="size-4 text-logistics-success" />,
-      title: 'Outbound',
-      value: '24',
-      change: '+12.5%',
-      changeType: 'positive'
+      label: 'Total Shipments',
+      value: total,
+      icon: <Package className="h-5 w-5 text-purple-500" />,
+      bgColor: 'bg-purple-50 dark:bg-purple-900/20',
+      textColor: 'text-purple-700 dark:text-purple-300',
+      borderColor: 'border-purple-100 dark:border-purple-800/30'
     },
     {
-      icon: <ArrowDownRight className="size-4 text-logistics-blue" />,
-      title: 'Inbound',
-      value: '18',
-      change: '+5.3%',
-      changeType: 'positive'
+      label: 'In Transit',
+      value: inTransit,
+      icon: <Truck className="h-5 w-5 text-blue-500" />,
+      bgColor: 'bg-blue-50 dark:bg-blue-900/20',
+      textColor: 'text-blue-700 dark:text-blue-300',
+      borderColor: 'border-blue-100 dark:border-blue-800/30'
     },
     {
-      icon: <TrendingUp className="size-4 text-logistics-indigo" />,
-      title: 'Active',
-      value: '32',
-      change: '+8.7%',
-      changeType: 'positive'
+      label: 'Delivered',
+      value: delivered,
+      icon: <CheckCircle className="h-5 w-5 text-green-500" />,
+      bgColor: 'bg-green-50 dark:bg-green-900/20',
+      textColor: 'text-green-700 dark:text-green-300',
+      borderColor: 'border-green-100 dark:border-green-800/30'
     },
     {
-      icon: <Clock className="size-4 text-logistics-warning" />,
-      title: 'Delayed',
-      value: '7',
-      change: '-2.1%',
-      changeType: 'negative'
+      label: 'Delayed',
+      value: delayed,
+      icon: <AlertTriangle className="h-5 w-5 text-amber-500" />,
+      bgColor: 'bg-amber-50 dark:bg-amber-900/20', 
+      textColor: 'text-amber-700 dark:text-amber-300',
+      borderColor: 'border-amber-100 dark:border-amber-800/30'
     }
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       {stats.map((stat, index) => (
-        <div key={index} className="bg-white dark:bg-logistics-dark/50 rounded-xl border border-border p-4">
-          <div className="flex justify-between items-start mb-2">
-            <div className="flex items-center gap-1.5">
-              <div className="size-7 rounded-md bg-logistics-light-gray dark:bg-white/5 flex items-center justify-center">
-                {stat.icon}
-              </div>
-              <span className="text-sm text-logistics-gray">{stat.title}</span>
+        <div 
+          key={index} 
+          className={`p-5 rounded-xl border ${stat.borderColor} ${stat.bgColor} shadow-sm`}
+        >
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{stat.label}</p>
+              <h3 className={`text-2xl font-bold mt-1 ${stat.textColor}`}>{stat.value}</h3>
             </div>
-            <div className={`text-xs ${stat.changeType === 'positive' ? 'text-logistics-success' : 'text-logistics-error'}`}>
-              {stat.change}
+            <div className={`p-3 rounded-full bg-white dark:bg-gray-800 shadow-sm border ${stat.borderColor}`}>
+              {stat.icon}
             </div>
           </div>
-          <div className="text-2xl font-semibold">{stat.value}</div>
         </div>
       ))}
     </div>
