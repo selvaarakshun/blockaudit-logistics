@@ -1,4 +1,3 @@
-
 // Blockchain interoperability utilities
 // This is a simplified mock implementation for demonstration purposes
 
@@ -18,6 +17,7 @@ export interface CrossChainTransaction {
   amount: string;
   status: 'pending' | 'completed' | 'failed';
   timestamp: string;
+  hash?: string; // Added hash property, making it optional
 }
 
 // Mock data for available blockchain networks

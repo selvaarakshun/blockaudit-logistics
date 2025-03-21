@@ -1,4 +1,3 @@
-
 import { CrossChainTransaction } from './interoperabilityUtils';
 
 // Generate mock blockchain transactions
