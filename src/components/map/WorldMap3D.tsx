@@ -1,7 +1,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, useTexture, Sphere, Line } from '@react-three/drei';
+import { OrbitControls, Sphere, Line } from '@react-three/drei';
 import { DoubleSide, Vector3, CubicBezierCurve3 } from 'three';
 import { Shipment } from '@/pages/Dashboard';
 
@@ -68,10 +68,10 @@ const FlightPath = ({
   // Generate points along the curve
   const points = curve.getPoints(50);
   
-  // Animation for package along the path
-  useFrame(({ clock }) => {
+  // Animation for the line
+  useFrame(() => {
     if (lineRef.current) {
-      lineRef.current.material.dashOffset -= 0.01;
+      lineRef.current.dashOffset -= 0.01;
     }
   });
   
@@ -102,10 +102,6 @@ const FlightPath = ({
 
 // Earth globe component
 const Earth = () => {
-  // Use placeholder texture paths that actually work
-  const earthDayMap = '/placeholder.svg';
-  
-  // Create simple materials instead of trying to load textures that don't exist
   const earthRef = useRef<any>(null);
   const cloudsRef = useRef<any>(null);
   
@@ -198,10 +194,16 @@ const latLongToVector3 = (lat: number, long: number, radius: number): [number, n
   return [x, y, z];
 };
 
-// Main World Map component
-const WorldMap3D = ({ shipments = [] }: { shipments?: Shipment[] }) => {
-  const [selectedShipment, setSelectedShipment] = useState<string | null>(null);
-  
+// Scene wrapper component to handle errors gracefully
+const WorldScene = ({ 
+  shipments, 
+  selectedShipment, 
+  setSelectedShipment 
+}: { 
+  shipments: Shipment[]; 
+  selectedShipment: string | null; 
+  setSelectedShipment: (id: string | null) => void;
+}) => {
   // Shipment data with coordinates
   const shipmentCoordinates = [
     { id: '1', origin: { lat: 40.7128, long: -74.0060 }, destination: { lat: 34.0522, long: -118.2437 } }, // NY to LA
@@ -233,69 +235,107 @@ const WorldMap3D = ({ shipments = [] }: { shipments?: Shipment[] }) => {
   };
 
   return (
+    <>
+      {/* Earth globe */}
+      <Earth />
+      
+      {/* Shipment markers */}
+      {shipments.map((shipment, index) => {
+        const coords = shipmentCoordinates[index % shipmentCoordinates.length];
+        if (!coords) return null;
+        
+        const originPos = latLongToVector3(coords.origin.lat, coords.origin.long, 1);
+        const destPos = latLongToVector3(coords.destination.lat, coords.destination.long, 1);
+        const color = getShipmentColor(shipment.status);
+        const progress = getShipmentProgress(shipment.status);
+        
+        return (
+          <group key={shipment.id}>
+            {/* Origin marker */}
+            <ShipmentMarker 
+              position={originPos} 
+              color="#3b82f6" 
+              selected={selectedShipment === shipment.id}
+              onClick={() => setSelectedShipment(shipment.id)} 
+            />
+            
+            {/* Destination marker */}
+            <ShipmentMarker 
+              position={destPos} 
+              color="#10b981" 
+              selected={selectedShipment === shipment.id}
+              onClick={() => setSelectedShipment(shipment.id)} 
+            />
+            
+            {/* Flight path */}
+            <FlightPath 
+              start={originPos} 
+              end={destPos} 
+              progress={progress}
+              color={color}
+            />
+          </group>
+        );
+      })}
+      
+      {/* Controls */}
+      <OrbitControls 
+        enablePan={false}
+        enableZoom={true}
+        minDistance={1.5}
+        maxDistance={4}
+        rotateSpeed={0.5}
+        zoomSpeed={0.5}
+        autoRotate={!selectedShipment}
+        autoRotateSpeed={0.5}
+      />
+      
+      {/* Lighting */}
+      <ambientLight intensity={0.2} />
+      <pointLight position={[10, 10, 10]} intensity={1.5} />
+      <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ffffff" />
+    </>
+  );
+};
+
+// Main World Map component
+const WorldMap3D = ({ shipments = [] }: { shipments?: Shipment[] }) => {
+  const [selectedShipment, setSelectedShipment] = useState<string | null>(null);
+  const [errorState, setErrorState] = useState<boolean>(false);
+
+  // Error handling
+  const handleErrors = (error: Error) => {
+    console.error("Three.js rendering error:", error);
+    setErrorState(true);
+  };
+
+  return (
     <div className="relative w-full h-[600px] rounded-lg overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700">
-      <Canvas camera={{ position: [0, 0, 2.5], fov: 45 }}>
-        <ambientLight intensity={0.2} />
-        <pointLight position={[10, 10, 10]} intensity={1.5} />
-        <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ffffff" />
-        
-        {/* Earth globe */}
-        <Earth />
-        
-        {/* Shipment markers */}
-        {shipments.map((shipment, index) => {
-          const coords = shipmentCoordinates[index % shipmentCoordinates.length];
-          if (!coords) return null;
-          
-          const originPos = latLongToVector3(coords.origin.lat, coords.origin.long, 1);
-          const destPos = latLongToVector3(coords.destination.lat, coords.destination.long, 1);
-          const color = getShipmentColor(shipment.status);
-          const progress = getShipmentProgress(shipment.status);
-          
-          return (
-            <group key={shipment.id}>
-              {/* Origin marker */}
-              <ShipmentMarker 
-                position={originPos} 
-                color="#3b82f6" 
-                selected={selectedShipment === shipment.id}
-                onClick={() => setSelectedShipment(shipment.id)} 
-              />
-              
-              {/* Destination marker */}
-              <ShipmentMarker 
-                position={destPos} 
-                color="#10b981" 
-                selected={selectedShipment === shipment.id}
-                onClick={() => setSelectedShipment(shipment.id)} 
-              />
-              
-              {/* Flight path */}
-              <FlightPath 
-                start={originPos} 
-                end={destPos} 
-                progress={progress}
-                color={color}
-              />
-            </group>
-          );
-        })}
-        
-        {/* Controls */}
-        <OrbitControls 
-          enablePan={false}
-          enableZoom={true}
-          minDistance={1.5}
-          maxDistance={4}
-          rotateSpeed={0.5}
-          zoomSpeed={0.5}
-          autoRotate={!selectedShipment}
-          autoRotateSpeed={0.5}
-        />
-      </Canvas>
+      {errorState ? (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+          <div className="text-center p-6">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            <h3 className="text-lg font-semibold mb-2">3D Map Unavailable</h3>
+            <p className="text-sm text-gray-500">Could not render the 3D world map. Please try again later.</p>
+          </div>
+        </div>
+      ) : (
+        <Canvas 
+          camera={{ position: [0, 0, 2.5], fov: 45 }}
+          onError={handleErrors}
+        >
+          <WorldScene 
+            shipments={shipments} 
+            selectedShipment={selectedShipment} 
+            setSelectedShipment={setSelectedShipment} 
+          />
+        </Canvas>
+      )}
       
       {/* Overlay with selected shipment details */}
-      {selectedShipment && (
+      {selectedShipment && !errorState && (
         <div className="absolute bottom-4 left-4 right-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm p-3 rounded-lg shadow-lg z-10">
           {shipments.filter(s => s.id === selectedShipment).map(shipment => (
             <div key={shipment.id} className="flex justify-between items-center">
