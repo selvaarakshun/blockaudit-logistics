@@ -102,14 +102,10 @@ const FlightPath = ({
 
 // Earth globe component
 const Earth = () => {
-  // Load Earth textures
-  const textures = useTexture({
-    map: '/earth_daymap.jpg',
-    bumpMap: '/earth_bumpmap.jpg',
-    specularMap: '/earth_specularmap.jpg',
-    cloudsMap: '/earth_clouds.jpg'
-  });
+  // Use placeholder texture paths that actually work
+  const earthDayMap = '/placeholder.svg';
   
+  // Create simple materials instead of trying to load textures that don't exist
   const earthRef = useRef<any>(null);
   const cloudsRef = useRef<any>(null);
   
@@ -128,10 +124,7 @@ const Earth = () => {
       {/* Earth sphere */}
       <Sphere ref={earthRef} args={[1, 64, 64]}>
         <meshPhongMaterial 
-          map={textures.map} 
-          bumpMap={textures.bumpMap} 
-          bumpScale={0.05}
-          specularMap={textures.specularMap}
+          color="#1e40af"
           specular="#555555"
           shininess={5}
         />
@@ -140,9 +133,9 @@ const Earth = () => {
       {/* Cloud layer */}
       <Sphere ref={cloudsRef} args={[1.01, 64, 64]}>
         <meshPhongMaterial 
-          map={textures.cloudsMap}
+          color="#ffffff"
           transparent
-          opacity={0.4}
+          opacity={0.2}
           depthWrite={false}
         />
       </Sphere>
@@ -156,6 +149,39 @@ const Earth = () => {
           side={DoubleSide}
         />
       </Sphere>
+      
+      {/* Land masses rough approximation */}
+      <group>
+        {/* North America */}
+        <mesh position={latLongToVector3(40, -100, 1.015)}>
+          <sphereGeometry args={[0.2, 16, 16]} />
+          <meshStandardMaterial color="#2e7d32" transparent opacity={0.8} />
+        </mesh>
+        
+        {/* South America */}
+        <mesh position={latLongToVector3(-20, -60, 1.015)}>
+          <sphereGeometry args={[0.15, 16, 16]} />
+          <meshStandardMaterial color="#2e7d32" transparent opacity={0.8} />
+        </mesh>
+        
+        {/* Europe/Asia */}
+        <mesh position={latLongToVector3(50, 10, 1.015)}>
+          <sphereGeometry args={[0.25, 16, 16]} />
+          <meshStandardMaterial color="#2e7d32" transparent opacity={0.8} />
+        </mesh>
+        
+        {/* Africa */}
+        <mesh position={latLongToVector3(0, 20, 1.015)}>
+          <sphereGeometry args={[0.2, 16, 16]} />
+          <meshStandardMaterial color="#2e7d32" transparent opacity={0.8} />
+        </mesh>
+        
+        {/* Australia */}
+        <mesh position={latLongToVector3(-25, 135, 1.015)}>
+          <sphereGeometry args={[0.1, 16, 16]} />
+          <meshStandardMaterial color="#2e7d32" transparent opacity={0.8} />
+        </mesh>
+      </group>
     </group>
   );
 };
