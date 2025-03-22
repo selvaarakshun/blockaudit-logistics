@@ -1,7 +1,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Sphere, Line } from '@react-three/drei';
+import { OrbitControls, Sphere } from '@react-three/drei';
 import { DoubleSide, Vector3, CubicBezierCurve3 } from 'three';
 import { Shipment } from '@/pages/Dashboard';
 
@@ -48,6 +48,7 @@ const FlightPath = ({
   progress: number;
   color: string;
 }) => {
+  const curvePoints = useRef<Vector3[]>([]);
   const lineRef = useRef<any>(null);
   
   // Calculate midpoint with height for curve
@@ -66,30 +67,33 @@ const FlightPath = ({
   );
   
   // Generate points along the curve
-  const points = curve.getPoints(50);
+  useEffect(() => {
+    curvePoints.current = curve.getPoints(50);
+  }, [start, end]);
   
   // Animation for the line
   useFrame(() => {
     if (lineRef.current) {
-      lineRef.current.dashOffset -= 0.01;
+      lineRef.current.material.dashOffset -= 0.01;
     }
   });
   
   return (
     <group>
-      {/* Line using drei Line component with dashed material */}
-      <Line
-        ref={lineRef}
-        points={points}
-        color={color}
-        lineWidth={1.5}
-        dashed
-        dashSize={0.1}
-        dashScale={1}
-        dashOffset={0}
-        transparent
-        opacity={0.6}
-      />
+      {/* Create a line directly using buffer geometry */}
+      <group>
+        <mesh>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              count={curvePoints.current.length}
+              array={new Float32Array(curvePoints.current.flatMap(p => [p.x, p.y, p.z]))}
+              itemSize={3}
+            />
+          </bufferGeometry>
+          <lineBasicMaterial color={color} linewidth={1.5} transparent opacity={0.6} />
+        </mesh>
+      </group>
       
       {/* Animated ship/package */}
       <mesh position={curve.getPointAt(progress).toArray()}>
@@ -303,12 +307,6 @@ const WorldMap3D = ({ shipments = [] }: { shipments?: Shipment[] }) => {
   const [selectedShipment, setSelectedShipment] = useState<string | null>(null);
   const [errorState, setErrorState] = useState<boolean>(false);
 
-  // Error handling - fix the type error by using React.ErrorInfo
-  const handleErrors = (event: any) => {
-    console.error("Three.js rendering error:", event);
-    setErrorState(true);
-  };
-
   return (
     <div className="relative w-full h-[600px] rounded-lg overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700">
       {errorState ? (
@@ -322,20 +320,20 @@ const WorldMap3D = ({ shipments = [] }: { shipments?: Shipment[] }) => {
           </div>
         </div>
       ) : (
-        <Canvas 
-          camera={{ position: [0, 0, 2.5], fov: 45 }}
-          onCreated={(state) => {
-            // Set a simple placeholder for state.gl.setClearColor
-            state.gl.setClearColor("#030711", 1);
-          }}
-          // Fix the type error by removing onError which is not a valid prop
-        >
-          <WorldScene 
-            shipments={shipments} 
-            selectedShipment={selectedShipment} 
-            setSelectedShipment={setSelectedShipment} 
-          />
-        </Canvas>
+        <ErrorBoundary fallback={<MapErrorFallback />}>
+          <Canvas 
+            camera={{ position: [0, 0, 2.5], fov: 45 }}
+            onCreated={(state) => {
+              state.gl.setClearColor("#030711", 1);
+            }}
+          >
+            <WorldScene 
+              shipments={shipments} 
+              selectedShipment={selectedShipment} 
+              setSelectedShipment={setSelectedShipment} 
+            />
+          </Canvas>
+        </ErrorBoundary>
       )}
       
       {/* Overlay with selected shipment details */}
@@ -387,5 +385,39 @@ const WorldMap3D = ({ shipments = [] }: { shipments?: Shipment[] }) => {
     </div>
   );
 };
+
+// Custom error boundary component to handle Three.js rendering errors
+class ErrorBoundary extends React.Component<{ children: React.ReactNode, fallback: React.ReactNode }> {
+  state = { hasError: false };
+  
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  
+  componentDidCatch(error: Error) {
+    console.error("Three.js rendering error:", error);
+  }
+  
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+    
+    return this.props.children;
+  }
+}
+
+// Fallback UI when map rendering fails
+const MapErrorFallback = () => (
+  <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+    <div className="text-center p-6">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+      </svg>
+      <h3 className="text-lg font-semibold mb-2">3D Map Unavailable</h3>
+      <p className="text-sm text-gray-500">Could not render the 3D world map. Please try again later.</p>
+    </div>
+  </div>
+);
 
 export default WorldMap3D;
