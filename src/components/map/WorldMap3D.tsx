@@ -1,8 +1,8 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, useTexture, Sphere } from '@react-three/drei';
-import { DoubleSide, Vector3 } from 'three';
+import { OrbitControls, useTexture, Sphere, Line } from '@react-three/drei';
+import { DoubleSide, Vector3, CubicBezierCurve3 } from 'three';
 import { Shipment } from '@/pages/Dashboard';
 
 // Marker component for shipment locations
@@ -36,7 +36,7 @@ const ShipmentMarker = ({
   );
 };
 
-// Animated flight path
+// Animated flight path using proper Three.js curves
 const FlightPath = ({ 
   start, 
   end, 
@@ -48,97 +48,56 @@ const FlightPath = ({
   progress: number;
   color: string;
 }) => {
-  const curve = useRef<any>(null);
   const lineRef = useRef<any>(null);
   
-  // Animate ship along the path
-  useFrame(() => {
-    if (curve.current && lineRef.current) {
-      // Update line material dash offset for animation
-      lineRef.current.material.dashOffset -= 0.01;
-    }
-  });
-  
-  const midPoint = [
+  // Calculate midpoint with height for curve
+  const midPoint: [number, number, number] = [
     (start[0] + end[0]) / 2,
     (start[1] + end[1]) / 2,
     (start[2] + end[2]) / 2 + 0.5 // Add height to curve
   ];
   
+  // Create bezier curve points
+  const curve = new CubicBezierCurve3(
+    new Vector3(...start),
+    new Vector3(start[0] * 0.8 + midPoint[0] * 0.2, start[1] * 0.8 + midPoint[1] * 0.2, midPoint[2] * 1.5),
+    new Vector3(end[0] * 0.8 + midPoint[0] * 0.2, end[1] * 0.8 + midPoint[1] * 0.2, midPoint[2] * 1.5),
+    new Vector3(...end)
+  );
+  
+  // Generate points along the curve
+  const points = curve.getPoints(50);
+  
+  // Animation for package along the path
+  useFrame(({ clock }) => {
+    if (lineRef.current) {
+      lineRef.current.material.dashOffset -= 0.01;
+    }
+  });
+  
   return (
     <group>
-      {/* Dotted line path */}
-      <mesh ref={lineRef}>
-        <tubeGeometry args={[
-          new CustomCurvedLine(start, midPoint as [number, number, number], end),
-          64,  // tubular segments
-          0.005, // radius
-          8,   // radial segments
-          false // closed
-        ]} />
-        <meshBasicMaterial 
-          color={color} 
-          transparent 
-          opacity={0.6} 
-          dashSize={0.1}
-          gapSize={0.1}
-          dashOffset={0}
-          onUpdate={(self) => {
-            self.dashSize = 0.1;
-            self.gapSize = 0.1;
-          }}
-        />
-      </mesh>
+      {/* Line using drei Line component with dashed material */}
+      <Line
+        ref={lineRef}
+        points={points}
+        color={color}
+        lineWidth={1.5}
+        dashed
+        dashSize={0.1}
+        dashScale={1}
+        dashOffset={0}
+        transparent
+        opacity={0.6}
+      />
       
       {/* Animated ship/package */}
-      <mesh position={calculatePositionOnCurve(start, midPoint as [number, number, number], end, progress)}>
+      <mesh position={curve.getPointAt(progress).toArray()}>
         <octahedronGeometry args={[0.03, 0]} />
         <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.8} />
       </mesh>
     </group>
   );
-};
-
-// Helper class for curved flight paths
-class CustomCurvedLine {
-  private points: Vector3[];
-  
-  constructor(start: [number, number, number], mid: [number, number, number], end: [number, number, number]) {
-    this.points = [
-      new Vector3(...start),
-      new Vector3(...mid),
-      new Vector3(...end)
-    ];
-  }
-  
-  getPoint(t: number) {
-    const p0 = this.points[0];
-    const p1 = this.points[1];
-    const p2 = this.points[2];
-    
-    // Quadratic Bezier curve formula
-    const x = (1 - t) * (1 - t) * p0.x + 2 * (1 - t) * t * p1.x + t * t * p2.x;
-    const y = (1 - t) * (1 - t) * p0.y + 2 * (1 - t) * t * p1.y + t * t * p2.y;
-    const z = (1 - t) * (1 - t) * p0.z + 2 * (1 - t) * t * p1.z + t * t * p2.z;
-    
-    return new Vector3(x, y, z);
-  }
-}
-
-// Calculate position on a curved line for a given progress (0-1)
-const calculatePositionOnCurve = (
-  start: [number, number, number], 
-  mid: [number, number, number], 
-  end: [number, number, number], 
-  progress: number
-): [number, number, number] => {
-  // Quadratic Bezier curve formula
-  const t = progress;
-  const x = (1 - t) * (1 - t) * start[0] + 2 * (1 - t) * t * mid[0] + t * t * end[0];
-  const y = (1 - t) * (1 - t) * start[1] + 2 * (1 - t) * t * mid[1] + t * t * end[1];
-  const z = (1 - t) * (1 - t) * start[2] + 2 * (1 - t) * t * mid[2] + t * t * end[2];
-  
-  return [x, y, z];
 };
 
 // Earth globe component
