@@ -1,9 +1,32 @@
-
-import { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Sphere } from '@react-three/drei';
 import { DoubleSide, Vector3, CubicBezierCurve3 } from 'three';
 import { Shipment } from '@/pages/Dashboard';
+
+// Custom error boundary component
+class ErrorBoundary extends React.Component<{ 
+  children: React.ReactNode, 
+  fallback: React.ReactNode 
+}> {
+  state = { hasError: false };
+  
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  
+  componentDidCatch(error: Error) {
+    console.error("Three.js rendering error:", error);
+  }
+  
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+    
+    return this.props.children;
+  }
+}
 
 // Marker component for shipment locations
 const ShipmentMarker = ({ 
@@ -385,27 +408,6 @@ const WorldMap3D = ({ shipments = [] }: { shipments?: Shipment[] }) => {
     </div>
   );
 };
-
-// Custom error boundary component to handle Three.js rendering errors
-class ErrorBoundary extends React.Component<{ children: React.ReactNode, fallback: React.ReactNode }> {
-  state = { hasError: false };
-  
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-  
-  componentDidCatch(error: Error) {
-    console.error("Three.js rendering error:", error);
-  }
-  
-  render() {
-    if (this.state.hasError) {
-      return this.props.fallback;
-    }
-    
-    return this.props.children;
-  }
-}
 
 // Fallback UI when map rendering fails
 const MapErrorFallback = () => (
