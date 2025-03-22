@@ -48,7 +48,13 @@ const AssetTransfer = ({ onTransactionCreated }: AssetTransferProps) => {
               </CardTitle>
               <CardDescription>Based on on-chain transaction history and verification</CardDescription>
             </div>
-            <Badge variant={creditScore.score > 80 ? "success" : creditScore.score > 60 ? "warning" : "destructive"} className="text-xs px-2.5 py-0.5 rounded-full">
+            <Badge 
+              variant={creditScore.score > 80 ? "default" : creditScore.score > 60 ? "secondary" : "destructive"} 
+              className={`text-xs px-2.5 py-0.5 rounded-full ${
+                creditScore.score > 80 ? "bg-green-500 hover:bg-green-600" : 
+                creditScore.score > 60 ? "bg-yellow-500 hover:bg-yellow-600 text-black" : ""
+              }`}
+            >
               {creditScore.score}/100
             </Badge>
           </div>
@@ -91,7 +97,10 @@ const AssetTransfer = ({ onTransactionCreated }: AssetTransferProps) => {
               </CardTitle>
               <CardDescription>Automated blockchain-based insurance coverage</CardDescription>
             </div>
-            <Badge variant="outline" className="bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800">
+            <Badge 
+              variant="outline" 
+              className="bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800"
+            >
               {insuranceData.status}
             </Badge>
           </div>
