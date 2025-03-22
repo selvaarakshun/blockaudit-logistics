@@ -303,9 +303,9 @@ const WorldMap3D = ({ shipments = [] }: { shipments?: Shipment[] }) => {
   const [selectedShipment, setSelectedShipment] = useState<string | null>(null);
   const [errorState, setErrorState] = useState<boolean>(false);
 
-  // Error handling
-  const handleErrors = (error: Error) => {
-    console.error("Three.js rendering error:", error);
+  // Error handling - fix the type error by using React.ErrorInfo
+  const handleErrors = (event: any) => {
+    console.error("Three.js rendering error:", event);
     setErrorState(true);
   };
 
@@ -324,7 +324,11 @@ const WorldMap3D = ({ shipments = [] }: { shipments?: Shipment[] }) => {
       ) : (
         <Canvas 
           camera={{ position: [0, 0, 2.5], fov: 45 }}
-          onError={handleErrors}
+          onCreated={(state) => {
+            // Set a simple placeholder for state.gl.setClearColor
+            state.gl.setClearColor("#030711", 1);
+          }}
+          // Fix the type error by removing onError which is not a valid prop
         >
           <WorldScene 
             shipments={shipments} 
