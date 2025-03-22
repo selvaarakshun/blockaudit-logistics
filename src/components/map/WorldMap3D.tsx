@@ -1,8 +1,8 @@
 
 import React, { useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Sphere } from '@react-three/drei';
-import { DoubleSide, Vector3, CubicBezierCurve3 } from 'three';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { OrbitControls, Sphere, PerspectiveCamera } from '@react-three/drei';
+import { DoubleSide, Vector3, CubicBezierCurve3, MathUtils } from 'three';
 import { Shipment } from '@/pages/Dashboard';
 
 // Custom error boundary component
@@ -28,6 +28,69 @@ class ErrorBoundary extends React.Component<{
     return this.props.children;
   }
 }
+
+// Camera controller for 3D tracking
+const CameraController = ({ 
+  trackingId, 
+  position, 
+  lookAt = [0, 0, 0],
+  enableTracking = false
+}: { 
+  trackingId: string | null; 
+  position?: [number, number, number];
+  lookAt?: [number, number, number];
+  enableTracking?: boolean;
+}) => {
+  const { camera } = useThree();
+  const controlsRef = useRef<any>(null);
+  
+  // Set initial camera position
+  useEffect(() => {
+    if (position && !trackingId) {
+      camera.position.set(...position);
+      camera.lookAt(...lookAt);
+    }
+  }, []);
+  
+  // Handle tracking mode
+  useEffect(() => {
+    if (controlsRef.current) {
+      // When tracking is enabled, disable orbit controls
+      controlsRef.current.enabled = !enableTracking;
+    }
+  }, [enableTracking]);
+  
+  // Animate to tracking position
+  useFrame((state, delta) => {
+    if (enableTracking && trackingId && position) {
+      // Smoothly move camera to tracking position with easing
+      camera.position.lerp(new Vector3(...position), delta * 2);
+      
+      // Look at target
+      const targetPos = new Vector3(...lookAt);
+      const currentLookAt = new Vector3();
+      camera.getWorldDirection(currentLookAt);
+      const targetLookAt = targetPos.clone().sub(camera.position).normalize();
+      
+      // Interpolate the camera direction
+      const newLookAt = currentLookAt.lerp(targetLookAt, delta * 3);
+      camera.lookAt(camera.position.clone().add(newLookAt));
+    }
+  });
+  
+  return <OrbitControls 
+    ref={controlsRef}
+    enablePan={false}
+    enableZoom={true}
+    minDistance={1.5}
+    maxDistance={4}
+    rotateSpeed={0.5}
+    zoomSpeed={0.5}
+    autoRotate={!trackingId && !enableTracking}
+    autoRotateSpeed={0.5}
+    maxPolarAngle={Math.PI * 0.7} // Similar to Google Maps' max tilt
+  />;
+};
 
 // Marker component for shipment locations
 const ShipmentMarker = ({ 
@@ -226,12 +289,18 @@ const latLongToVector3 = (lat: number, long: number, radius: number): [number, n
 const WorldScene = ({ 
   shipments, 
   selectedShipment, 
-  setSelectedShipment 
+  setSelectedShipment,
+  isTracking
 }: { 
   shipments: Shipment[]; 
   selectedShipment: string | null; 
   setSelectedShipment: (id: string | null) => void;
+  isTracking: boolean;
 }) => {
+  // Camera tracking position and target
+  const [trackingCameraPos, setTrackingCameraPos] = useState<[number, number, number]>([0, 0, 2.5]);
+  const [trackingTarget, setTrackingTarget] = useState<[number, number, number]>([0, 0, 0]);
+  
   // Shipment data with coordinates
   const shipmentCoordinates = [
     { id: '1', origin: { lat: 40.7128, long: -74.0060 }, destination: { lat: 34.0522, long: -118.2437 } }, // NY to LA
@@ -261,9 +330,61 @@ const WorldScene = ({
       default: return 0.5;
     }
   };
+  
+  // Update camera position when tracking a shipment
+  useEffect(() => {
+    if (selectedShipment && isTracking) {
+      const selectedCoord = shipmentCoordinates.find(coord => coord.id === selectedShipment);
+      if (selectedCoord) {
+        const shipment = shipments.find(s => s.id === selectedShipment);
+        const progress = shipment ? getShipmentProgress(shipment.status) : 0.5;
+        
+        const origin = latLongToVector3(selectedCoord.origin.lat, selectedCoord.origin.long, 1);
+        const destination = latLongToVector3(selectedCoord.destination.lat, selectedCoord.destination.long, 1);
+        
+        // Calculate midpoint
+        const midPoint: [number, number, number] = [
+          (origin[0] + destination[0]) / 2,
+          (origin[1] + destination[1]) / 2,
+          (origin[2] + destination[2]) / 2 + 0.5
+        ];
+        
+        // Create a curve
+        const curve = new CubicBezierCurve3(
+          new Vector3(...origin),
+          new Vector3(origin[0] * 0.8 + midPoint[0] * 0.2, origin[1] * 0.8 + midPoint[1] * 0.2, midPoint[2] * 1.5),
+          new Vector3(destination[0] * 0.8 + midPoint[0] * 0.2, destination[1] * 0.8 + midPoint[1] * 0.2, midPoint[2] * 1.5),
+          new Vector3(...destination)
+        );
+        
+        // Get current position along curve based on progress
+        const currentPos = curve.getPointAt(progress);
+        
+        // Calculate optimal camera position to view the tracked point
+        // Position camera at a slight offset from the tracked point
+        const trackingPos: [number, number, number] = [
+          currentPos.x * 1.5,
+          currentPos.y * 1.5, 
+          currentPos.z * 1.5
+        ];
+        
+        setTrackingCameraPos(trackingPos);
+        setTrackingTarget([currentPos.x, currentPos.y, currentPos.z]);
+      }
+    }
+  }, [selectedShipment, isTracking, shipments]);
 
   return (
     <>
+      {/* Camera with tracking support */}
+      <PerspectiveCamera makeDefault position={[0, 0, 2.5]} fov={45} />
+      <CameraController 
+        trackingId={selectedShipment} 
+        position={trackingCameraPos} 
+        lookAt={trackingTarget}
+        enableTracking={isTracking}
+      />
+      
       {/* Earth globe */}
       <Earth />
       
@@ -306,18 +427,6 @@ const WorldScene = ({
         );
       })}
       
-      {/* Controls */}
-      <OrbitControls 
-        enablePan={false}
-        enableZoom={true}
-        minDistance={1.5}
-        maxDistance={4}
-        rotateSpeed={0.5}
-        zoomSpeed={0.5}
-        autoRotate={!selectedShipment}
-        autoRotateSpeed={0.5}
-      />
-      
       {/* Lighting */}
       <ambientLight intensity={0.2} />
       <pointLight position={[10, 10, 10]} intensity={1.5} />
@@ -343,6 +452,8 @@ const MapErrorFallback = () => (
 const WorldMap3D = ({ shipments = [] }: { shipments?: Shipment[] }) => {
   const [selectedShipment, setSelectedShipment] = useState<string | null>(null);
   const [errorState, setErrorState] = useState<boolean>(false);
+  const [isTracking, setIsTracking] = useState<boolean>(false);
+  const [tiltAngle, setTiltAngle] = useState<number>(30);
 
   return (
     <div className="relative w-full h-[600px] rounded-lg overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700">
@@ -367,9 +478,43 @@ const WorldMap3D = ({ shipments = [] }: { shipments?: Shipment[] }) => {
             <WorldScene 
               shipments={shipments} 
               selectedShipment={selectedShipment} 
-              setSelectedShipment={setSelectedShipment} 
+              setSelectedShipment={setSelectedShipment}
+              isTracking={isTracking}
             />
           </Canvas>
+          
+          {/* 3D Tracking Controls */}
+          <div className="absolute top-4 right-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-2 rounded-lg shadow-lg z-20 flex gap-2">
+            <button
+              onClick={() => setIsTracking(prev => !prev)}
+              className={`p-2 rounded ${isTracking ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}`}
+              title={isTracking ? "Disable 3D tracking" : "Enable 3D tracking"}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </button>
+            <button
+              onClick={() => setTiltAngle(prev => Math.min(prev + 10, 60))}
+              disabled={!isTracking}
+              className={`p-2 rounded ${!isTracking ? 'opacity-50 cursor-not-allowed' : 'bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600'}`}
+              title="Increase tilt angle"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m18 15-6-6-6 6" />
+              </svg>
+            </button>
+            <button
+              onClick={() => setTiltAngle(prev => Math.max(prev - 10, 0))}
+              disabled={!isTracking}
+              className={`p-2 rounded ${!isTracking ? 'opacity-50 cursor-not-allowed' : 'bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600'}`}
+              title="Decrease tilt angle"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+          </div>
         </ErrorBoundary>
       )}
       
