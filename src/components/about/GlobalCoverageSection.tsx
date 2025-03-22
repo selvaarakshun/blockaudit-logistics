@@ -1,5 +1,5 @@
 
-import InteractiveMap from '@/components/map/InteractiveMap';
+import LogisticsMap from '@/components/map/LogisticsMap';
 
 const GlobalCoverageSection = () => {
   return (
@@ -13,7 +13,7 @@ const GlobalCoverageSection = () => {
         </div>
         
         <div className="rounded-xl overflow-hidden shadow-strong border border-border">
-          <InteractiveMap />
+          <LogisticsMap />
         </div>
         
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-12">

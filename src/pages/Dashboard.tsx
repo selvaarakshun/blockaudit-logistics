@@ -6,9 +6,9 @@ import ShipmentCard from '@/components/ShipmentCard';
 import ShipmentHeader from '@/components/dashboard/ShipmentHeader';
 import DashboardStats from '@/components/dashboard/DashboardStats';
 import ShipmentFilter from '@/components/dashboard/ShipmentFilter';
-import ShipmentMap from '@/components/dashboard/ShipmentMap';
 import { toast } from "@/components/ui/use-toast";
 import { ShipmentFormValues } from '@/components/dashboard/shipment-schema';
+import LogisticsMap from '@/components/map/LogisticsMap';
 
 export interface Shipment {
   id: string;
@@ -125,6 +125,11 @@ const Dashboard = () => {
           
           <DashboardStats shipments={shipments} />
           
+          {/* Interactive Real-time Map */}
+          <div className="mb-8">
+            <LogisticsMap />
+          </div>
+          
           <ShipmentFilter activeTab={activeTab} setActiveTab={setActiveTab} />
           
           <div className="grid md:grid-cols-2 gap-6">
@@ -151,8 +156,6 @@ const Dashboard = () => {
               </div>
             )}
           </div>
-          
-          <ShipmentMap shipments={shipments} />
         </div>
       </main>
       
