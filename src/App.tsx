@@ -15,6 +15,7 @@ import About from "./pages/About";
 import Settings from "./pages/Settings";
 import TaxCompliance from "./pages/TaxCompliance";
 import IcegatePage from "./pages/IcegatePage";
+import DocumentationRequirements from "./pages/DocumentationRequirements";
 import ChatbotDialog from "./components/chat/ChatbotDialog";
 
 const queryClient = new QueryClient();
@@ -60,6 +61,7 @@ const App = () => (
             <Route path="/tax-compliance" element={<TaxCompliance />} />
             <Route path="/tax-compliance/icegate" element={<IcegatePage />} />
             <Route path="/tax-compliance/duties" element={<TaxCompliance />} />
+            <Route path="/tax-compliance/documentation" element={<DocumentationRequirements />} />
             
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
