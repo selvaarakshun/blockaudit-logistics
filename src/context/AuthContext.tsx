@@ -6,6 +6,7 @@ type User = {
   id: string;
   username: string;
   email: string;
+  isTestAccount?: boolean;
 };
 
 type AuthContextType = {
@@ -29,12 +30,17 @@ const AuthContext = createContext<AuthContextType>({
   allUsers: [],
 });
 
-// Sample user data for demonstration
-const sampleUsers: User[] = [
+// Extend the user type to include passwords for local storage
+type StoredUser = User & { password: string };
+
+// Sample user data for demonstration with test account
+const sampleUsers: StoredUser[] = [
   {
     id: '1',
-    username: 'admin',
-    email: 'admin@example.com',
+    username: 'test_user',
+    email: 'test@example.com',
+    password: 'password123',
+    isTestAccount: true,
   }
 ];
 
@@ -49,11 +55,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const storedUsers = localStorage.getItem('users');
     
     if (storedUsers) {
-      setAllUsers(JSON.parse(storedUsers));
+      // Get users but remove passwords for security when exposing to UI
+      const parsedUsers = JSON.parse(storedUsers) as StoredUser[];
+      setAllUsers(parsedUsers.map(({ password, ...user }) => user));
     } else {
       // Initialize with sample users
       localStorage.setItem('users', JSON.stringify(sampleUsers));
-      setAllUsers(sampleUsers);
+      setAllUsers(sampleUsers.map(({ password, ...user }) => user));
     }
     
     if (storedUser) {
@@ -65,42 +73,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Login function
   const login = async (username: string, password: string) => {
-    // In a real app, you'd validate against a backend
-    // For demo purposes, we're just checking if the user exists in our sample data
-    
     // Get users from localStorage
     const storedUsers = localStorage.getItem('users');
-    const users = storedUsers ? JSON.parse(storedUsers) : sampleUsers;
+    const users = storedUsers ? JSON.parse(storedUsers) as StoredUser[] : sampleUsers;
     
     // Simulate authentication delay
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    const foundUser = users.find((u: User) => u.username === username);
+    // Find user by username
+    const foundUser = users.find((u: StoredUser) => u.username === username);
     
     if (!foundUser) {
       throw new Error('Invalid username or password');
     }
     
-    // In a real implementation, you'd check the password hash
-    // Here we're just simulating successful login
+    // Verify password
+    if (foundUser.password !== password) {
+      throw new Error('Invalid username or password');
+    }
     
-    setUser(foundUser);
-    localStorage.setItem('currentUser', JSON.stringify(foundUser));
+    // Remove password from user object before setting to state
+    const { password: _, ...secureUser } = foundUser;
+    
+    setUser(secureUser);
+    localStorage.setItem('currentUser', JSON.stringify(secureUser));
   };
 
   // Register function
   const register = async (username: string, email: string, password: string) => {
     // Get current users
     const storedUsers = localStorage.getItem('users');
-    const users = storedUsers ? JSON.parse(storedUsers) : sampleUsers;
+    const users = storedUsers ? JSON.parse(storedUsers) as StoredUser[] : sampleUsers;
     
     // Check if username already exists
-    if (users.some((u: User) => u.username === username)) {
+    if (users.some((u: StoredUser) => u.username === username)) {
       throw new Error('Username already taken');
     }
     
     // Check if email already exists
-    if (users.some((u: User) => u.email === email)) {
+    if (users.some((u: StoredUser) => u.email === email)) {
       throw new Error('Email already registered');
     }
     
@@ -108,20 +119,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Create new user
-    const newUser = {
+    const newUser: StoredUser = {
       id: Date.now().toString(),
       username,
-      email
+      email,
+      password,
+      isTestAccount: false // New users are not test accounts
     };
     
     // Update users list
     const updatedUsers = [...users, newUser];
     localStorage.setItem('users', JSON.stringify(updatedUsers));
-    setAllUsers(updatedUsers);
+    
+    // Update allUsers state with password removed
+    const { password: _, ...secureUser } = newUser;
+    setAllUsers([...allUsers, secureUser]);
     
     // Log in the new user
-    setUser(newUser);
-    localStorage.setItem('currentUser', JSON.stringify(newUser));
+    setUser(secureUser);
+    localStorage.setItem('currentUser', JSON.stringify(secureUser));
   };
 
   // Logout function

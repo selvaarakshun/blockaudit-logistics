@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Search, Users } from 'lucide-react';
+import { Search, Users, ShieldCheck } from 'lucide-react';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -45,6 +45,7 @@ const UserManagement = () => {
                   <tr>
                     <th className="px-6 py-3 text-sm font-medium text-logistics-dark dark:text-white">Username</th>
                     <th className="px-6 py-3 text-sm font-medium text-logistics-dark dark:text-white">Email</th>
+                    <th className="px-6 py-3 text-sm font-medium text-logistics-dark dark:text-white">Account Type</th>
                     <th className="px-6 py-3 text-sm font-medium text-logistics-dark dark:text-white">Actions</th>
                   </tr>
                 </thead>
@@ -55,13 +56,25 @@ const UserManagement = () => {
                         <td className="px-6 py-4 text-sm">{user.username}</td>
                         <td className="px-6 py-4 text-sm">{user.email}</td>
                         <td className="px-6 py-4 text-sm">
+                          {user.isTestAccount ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                              <ShieldCheck className="h-3 w-3" />
+                              Test Account
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                              Regular Account
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 text-sm">
                           <Button variant="outline" size="sm">View Data</Button>
                         </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={3} className="px-6 py-8 text-center text-sm text-muted-foreground">
+                      <td colSpan={4} className="px-6 py-8 text-center text-sm text-muted-foreground">
                         No users found matching your search.
                       </td>
                     </tr>

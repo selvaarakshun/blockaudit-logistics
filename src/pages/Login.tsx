@@ -2,6 +2,8 @@
 import LoginForm from "@/components/auth/LoginForm";
 import { useAuth } from "@/context/AuthContext";
 import { Navigate } from "react-router-dom";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ShieldCheck } from "lucide-react";
 
 const Login = () => {
   const { isAuthenticated } = useAuth();
@@ -21,6 +23,13 @@ const Login = () => {
               Login to access your logistics dashboard
             </p>
           </div>
+          
+          <Alert className="mb-6 bg-amber-50 border-amber-200 text-amber-800">
+            <ShieldCheck className="h-4 w-4 text-amber-600" />
+            <AlertDescription>
+              <strong>Test Account:</strong> Username: test_user | Password: password123
+            </AlertDescription>
+          </Alert>
           
           <LoginForm />
         </div>

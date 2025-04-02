@@ -9,6 +9,7 @@ import ShipmentFilter from '@/components/dashboard/ShipmentFilter';
 import { toast } from "@/components/ui/use-toast";
 import { ShipmentFormValues } from '@/components/dashboard/shipment-schema';
 import WorldMap3D from '@/components/map/WorldMap3D';
+import { useAuth } from '@/context/AuthContext';
 
 export interface Shipment {
   id: string;
@@ -20,79 +21,125 @@ export interface Shipment {
   lastUpdated: string;
   items: number;
   shipmentName?: string;
+  userId?: string;
 }
 
 const STORAGE_KEY = 'logistics-shipments';
 
+// Default shipments for test accounts
+const defaultShipments: Shipment[] = [
+  {
+    id: '1',
+    trackingNumber: 'SHP-12345678',
+    status: 'in-transit',
+    origin: 'New York, NY',
+    destination: 'Los Angeles, CA',
+    estimatedDelivery: '2023-05-18T00:00:00Z',
+    lastUpdated: '2023-05-14T09:23:45Z',
+    items: 3
+  },
+  {
+    id: '2',
+    trackingNumber: 'SHP-87654321',
+    status: 'delivered',
+    origin: 'San Francisco, CA',
+    destination: 'Seattle, WA',
+    estimatedDelivery: '2023-05-12T00:00:00Z',
+    lastUpdated: '2023-05-12T14:35:22Z',
+    items: 1
+  },
+  {
+    id: '3',
+    trackingNumber: 'SHP-23456789',
+    status: 'pending',
+    origin: 'Chicago, IL',
+    destination: 'Miami, FL',
+    estimatedDelivery: '2023-05-20T00:00:00Z',
+    lastUpdated: '2023-05-13T11:45:30Z',
+    items: 2
+  },
+  {
+    id: '4',
+    trackingNumber: 'SHP-34567890',
+    status: 'delayed',
+    origin: 'Boston, MA',
+    destination: 'Austin, TX',
+    estimatedDelivery: '2023-05-19T00:00:00Z',
+    lastUpdated: '2023-05-14T16:10:15Z',
+    items: 5
+  }
+];
+
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [shipments, setShipments] = useState<Shipment[]>([]);
+  const { user } = useAuth();
   
   // Load shipments from local storage on initial render
   useEffect(() => {
+    if (!user) return;
+    
     const storedShipments = localStorage.getItem(STORAGE_KEY);
     
     if (storedShipments) {
       try {
-        setShipments(JSON.parse(storedShipments));
+        const allShipments = JSON.parse(storedShipments) as Shipment[];
+        
+        // Filter shipments for the current user or show demo data for test account
+        if (user.isTestAccount) {
+          // For test accounts, show demo data if no shipments for that user yet
+          const userShipments = allShipments.filter(s => s.userId === user.id);
+          if (userShipments.length === 0) {
+            // Add userId to default shipments and add them to storage
+            const testShipments = defaultShipments.map(s => ({
+              ...s,
+              userId: user.id
+            }));
+            
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([
+              ...allShipments,
+              ...testShipments
+            ]));
+            
+            setShipments(testShipments);
+          } else {
+            setShipments(userShipments);
+          }
+        } else {
+          // For regular users, just show their shipments
+          setShipments(allShipments.filter(s => s.userId === user.id));
+        }
       } catch (error) {
         console.error('Error parsing stored shipments:', error);
-        loadDefaultShipments();
+        loadDefaultShipmentsForUser();
       }
     } else {
-      loadDefaultShipments();
+      loadDefaultShipmentsForUser();
     }
-  }, []);
+  }, [user]);
   
-  const loadDefaultShipments = () => {
-    const defaultShipments: Shipment[] = [
-      {
-        id: '1',
-        trackingNumber: 'SHP-12345678',
-        status: 'in-transit',
-        origin: 'New York, NY',
-        destination: 'Los Angeles, CA',
-        estimatedDelivery: '2023-05-18T00:00:00Z',
-        lastUpdated: '2023-05-14T09:23:45Z',
-        items: 3
-      },
-      {
-        id: '2',
-        trackingNumber: 'SHP-87654321',
-        status: 'delivered',
-        origin: 'San Francisco, CA',
-        destination: 'Seattle, WA',
-        estimatedDelivery: '2023-05-12T00:00:00Z',
-        lastUpdated: '2023-05-12T14:35:22Z',
-        items: 1
-      },
-      {
-        id: '3',
-        trackingNumber: 'SHP-23456789',
-        status: 'pending',
-        origin: 'Chicago, IL',
-        destination: 'Miami, FL',
-        estimatedDelivery: '2023-05-20T00:00:00Z',
-        lastUpdated: '2023-05-13T11:45:30Z',
-        items: 2
-      },
-      {
-        id: '4',
-        trackingNumber: 'SHP-34567890',
-        status: 'delayed',
-        origin: 'Boston, MA',
-        destination: 'Austin, TX',
-        estimatedDelivery: '2023-05-19T00:00:00Z',
-        lastUpdated: '2023-05-14T16:10:15Z',
-        items: 5
-      }
-    ];
+  const loadDefaultShipmentsForUser = () => {
+    if (!user) return;
     
-    setShipments(defaultShipments);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultShipments));
+    if (user.isTestAccount) {
+      // For test accounts, show demo data with user ID
+      const testShipments = defaultShipments.map(s => ({
+        ...s,
+        userId: user.id
+      }));
+      
+      setShipments(testShipments);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(testShipments));
+    } else {
+      // For regular users, initialize with empty array
+      setShipments([]);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+    }
   };
   
   const handleNewShipment = (shipmentData: ShipmentFormValues) => {
+    if (!user) return;
+    
     const newShipment: Shipment = {
       id: `${Date.now()}`,
       trackingNumber: `SHP-${Math.floor(Math.random() * 10000000)}`,
@@ -102,12 +149,21 @@ const Dashboard = () => {
       estimatedDelivery: shipmentData.estimatedDelivery,
       lastUpdated: new Date().toISOString(),
       items: shipmentData.items,
-      shipmentName: shipmentData.shipmentName
+      shipmentName: shipmentData.shipmentName,
+      userId: user.id
     };
     
-    const updatedShipments = [newShipment, ...shipments];
-    setShipments(updatedShipments);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedShipments));
+    // Get all shipments from storage
+    const storedShipments = localStorage.getItem(STORAGE_KEY);
+    const allShipments = storedShipments ? JSON.parse(storedShipments) : [];
+    
+    // Add new shipment
+    const updatedAllShipments = [...allShipments, newShipment];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedAllShipments));
+    
+    // Update state with user's shipments
+    const updatedUserShipments = [...shipments, newShipment];
+    setShipments(updatedUserShipments);
     
     toast({
       title: "Shipment Created",
