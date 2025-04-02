@@ -15,7 +15,7 @@ const Login = () => {
   }
   
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-logistics-light-blue/10 to-white dark:from-logistics-blue/5 dark:to-logistics-dark">
+    <div className="min-h-screen flex flex-col w-full bg-gradient-to-b from-logistics-light-blue/10 to-white dark:from-logistics-blue/5 dark:to-logistics-dark">
       <div className="flex-grow flex items-center justify-center p-4">
         <motion.div 
           className="w-full max-w-md"

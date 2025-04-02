@@ -6,10 +6,10 @@ import AuditSidebar from '@/components/audit/AuditSidebar';
 
 const AuditTrailPage = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col w-full">
       <Navbar />
       
-      <main className="flex-grow py-8 pt-24">
+      <main className="flex-grow py-8 pt-24 w-full">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <AuditContent />

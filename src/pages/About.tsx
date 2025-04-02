@@ -42,31 +42,31 @@ const About = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col w-full">
       <Navbar />
       
-      <main className="flex-grow pt-20">
+      <main className="flex-grow w-full pt-20">
         <AboutHero scrollToSection={scrollToSection} />
         
         <NavigationDots activeSection={activeSection} scrollToSection={scrollToSection} />
         
-        <div ref={(el: HTMLDivElement | null) => sectionRefs.current[0] = el}>
+        <div ref={(el: HTMLDivElement | null) => sectionRefs.current[0] = el} className="w-full">
           <AboutOverview />
         </div>
         
-        <div ref={(el: HTMLDivElement | null) => sectionRefs.current[1] = el}>
+        <div ref={(el: HTMLDivElement | null) => sectionRefs.current[1] = el} className="w-full">
           <TechnologySection />
         </div>
         
-        <div ref={(el: HTMLDivElement | null) => sectionRefs.current[2] = el}>
+        <div ref={(el: HTMLDivElement | null) => sectionRefs.current[2] = el} className="w-full">
           <BenefitsSection />
         </div>
         
-        <div ref={(el: HTMLDivElement | null) => sectionRefs.current[3] = el}>
+        <div ref={(el: HTMLDivElement | null) => sectionRefs.current[3] = el} className="w-full">
           <GlobalCoverageSection />
         </div>
         
-        <div ref={(el: HTMLDivElement | null) => sectionRefs.current[4] = el}>
+        <div ref={(el: HTMLDivElement | null) => sectionRefs.current[4] = el} className="w-full">
           <TeamSection />
         </div>
         
