@@ -1,0 +1,61 @@
+
+/* Navbar specific styles */
+.navbar {
+  @apply fixed top-0 w-full z-50 transition-all duration-300;
+}
+
+.navbar-scrolled {
+  @apply glass shadow-subtle py-3;
+}
+
+.navbar-transparent {
+  @apply bg-transparent py-5;
+}
+
+.navbar-logo {
+  @apply flex items-center gap-2 font-semibold text-lg text-logistics-dark dark:text-white;
+}
+
+.navbar-logo-icon {
+  @apply flex items-center justify-center size-8 bg-gradient-to-r from-logistics-blue to-logistics-indigo rounded-md text-white shadow-subtle;
+}
+
+.navbar-menu-item {
+  @apply px-4 py-2 rounded-md text-sm font-medium transition-all inline-block;
+}
+
+.navbar-menu-item-active {
+  @apply text-logistics-blue;
+}
+
+.navbar-menu-item-inactive {
+  @apply text-logistics-gray hover:text-logistics-dark dark:hover:text-white;
+}
+
+.navbar-dropdown {
+  @apply bg-white dark:bg-logistics-dark p-4 rounded-md shadow-medium min-w-[320px];
+}
+
+.navbar-dropdown-item {
+  @apply block p-2 rounded-md hover:bg-logistics-light-gray dark:hover:bg-white/5;
+}
+
+.navbar-mobile-menu {
+  @apply md:hidden absolute top-full left-0 w-full bg-white dark:bg-logistics-dark shadow-medium animate-slide-down;
+}
+
+.navbar-mobile-item {
+  @apply px-4 py-3 rounded-md text-sm font-medium;
+}
+
+.navbar-mobile-item-active {
+  @apply bg-logistics-light-blue text-logistics-blue dark:bg-logistics-blue/10;
+}
+
+.navbar-mobile-item-inactive {
+  @apply text-logistics-gray hover:bg-logistics-light-gray dark:hover:bg-white/5;
+}
+
+.navbar-mobile-dropdown {
+  @apply flex items-center justify-between px-4 py-3 rounded-md text-sm font-medium bg-logistics-light-gray dark:bg-white/5;
+}

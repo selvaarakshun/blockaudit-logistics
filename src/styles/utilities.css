@@ -1,0 +1,33 @@
+
+/* Glass and utility styles */
+.glass {
+  @apply backdrop-blur-md bg-white/70 dark:bg-black/40;
+}
+
+.glass-card {
+  @apply backdrop-blur-md bg-white/80 dark:bg-black/50 border border-white/20 dark:border-white/10;
+}
+
+.shadow-subtle {
+  @apply shadow-[0_2px_10px_rgba(0,0,0,0.05)];
+}
+
+.shadow-medium {
+  @apply shadow-[0_4px_20px_rgba(0,0,0,0.08)];
+}
+
+.shadow-strong {
+  @apply shadow-[0_8px_30px_rgba(0,0,0,0.12)];
+}
+
+.full-screen {
+  @apply min-h-screen w-full;
+}
+
+.full-width {
+  @apply w-full;
+}
+
+.container-responsive {
+  @apply container px-4 md:px-6 mx-auto max-w-7xl;
+}
