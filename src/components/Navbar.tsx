@@ -2,7 +2,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, Users } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import UserProfile from '@/components/auth/UserProfile';
 import { 
   NavigationMenu,
   NavigationMenuContent,
@@ -16,6 +18,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,10 +40,13 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'Home', path: '/' },
-    { name: 'Dashboard', path: '/dashboard' },
-    { name: 'Audit Trail', path: '/audit-trail' },
-    { name: 'Blockchain Explorer', path: '/blockchain-explorer' },
-    { name: 'Customs & Tax', path: '/tax-compliance' },
+    ...(isAuthenticated ? [
+      { name: 'Dashboard', path: '/dashboard' },
+      { name: 'Audit Trail', path: '/audit-trail' },
+      { name: 'Blockchain Explorer', path: '/blockchain-explorer' },
+      { name: 'Customs & Tax', path: '/tax-compliance' },
+      { name: 'User Management', path: '/users' }
+    ] : []),
     { name: 'About', path: '/about' },
   ];
 
@@ -71,7 +77,7 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-4">
           <NavigationMenu>
             <NavigationMenuList>
               {navLinks.map((link) => (
@@ -135,9 +141,18 @@ const Navbar = () => {
             </NavigationMenuList>
           </NavigationMenu>
 
-          <Link to="/dashboard" className="btn-primary">
-            Get Started
-          </Link>
+          {isAuthenticated ? (
+            <UserProfile />
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link to="/login" className="btn-secondary text-sm">
+                Login
+              </Link>
+              <Link to="/register" className="btn-primary text-sm">
+                Register
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -210,12 +225,42 @@ const Navbar = () => {
                 </Link>
               )
             ))}
-            <Link 
-              to="/dashboard" 
-              className="mt-2 text-center btn-primary"
-            >
-              Get Started
-            </Link>
+            
+            {isAuthenticated ? (
+              <div className="mt-4 border-t border-gray-200 dark:border-gray-700 pt-4">
+                <Link 
+                  to="/settings" 
+                  className="block px-4 py-3 rounded-md text-sm font-medium text-logistics-gray hover:bg-logistics-light-gray dark:hover:bg-white/5"
+                >
+                  Settings
+                </Link>
+                <button 
+                  onClick={() => {
+                    const { logout } = require('@/context/AuthContext').useAuth();
+                    logout();
+                    window.location.href = '/';
+                  }}
+                  className="w-full text-left px-4 py-3 rounded-md text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <Link 
+                  to="/login" 
+                  className="text-center px-4 py-3 rounded-md text-sm font-medium border border-logistics-gray text-logistics-dark dark:text-white"
+                >
+                  Login
+                </Link>
+                <Link 
+                  to="/register" 
+                  className="text-center btn-primary"
+                >
+                  Register
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}
