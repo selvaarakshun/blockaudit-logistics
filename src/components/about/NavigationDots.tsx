@@ -14,10 +14,10 @@ const NavigationDots = ({ activeSection, scrollToSection }: NavigationDotsProps)
           className="group flex items-center gap-2"
         >
           <div 
-            className={`size-3 rounded-full transition-all duration-300 ${
+            className={`about-navigation-dot ${
               activeSection === index 
-                ? 'bg-logistics-blue size-4' 
-                : 'bg-logistics-gray/50 group-hover:bg-logistics-gray'
+                ? 'about-navigation-dot-active' 
+                : 'about-navigation-dot-inactive'
             }`}
           ></div>
           <span 

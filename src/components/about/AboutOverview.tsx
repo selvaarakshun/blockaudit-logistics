@@ -1,14 +1,15 @@
 
 import { Database, Search, CheckCircle2 } from 'lucide-react';
+import AboutStatItem from './AboutStatItem';
 
 const AboutOverview = () => {
   return (
-    <section className="py-16 md:py-24">
+    <section className="about-section">
       <div className="container">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="text-3xl font-bold mb-6">The GuudzChain Platform</h2>
-            <p className="text-lg text-logistics-gray mb-6">
+            <h2 className="section-title">The GuudzChain Platform</h2>
+            <p className="section-description">
               GuudzChain is a cutting-edge blockchain platform designed specifically for logistics and supply chain management. Our mission is to eliminate inefficiencies and create a new standard of transparency in global trade.
             </p>
             <p className="text-lg text-logistics-gray mb-8">
@@ -16,22 +17,10 @@ const AboutOverview = () => {
             </p>
             
             <div className="grid grid-cols-2 gap-6">
-              <div>
-                <div className="text-3xl font-bold text-logistics-blue mb-2">250+</div>
-                <p className="text-logistics-gray">Global Clients</p>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-logistics-blue mb-2">36M+</div>
-                <p className="text-logistics-gray">Blockchain Transactions</p>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-logistics-blue mb-2">99.99%</div>
-                <p className="text-logistics-gray">Uptime Reliability</p>
-              </div>
-              <div>
-                <div className="text-3xl font-bold text-logistics-blue mb-2">45%</div>
-                <p className="text-logistics-gray">Cost Reduction</p>
-              </div>
+              <AboutStatItem value="250+" label="Global Clients" />
+              <AboutStatItem value="36M+" label="Blockchain Transactions" />
+              <AboutStatItem value="99.99%" label="Uptime Reliability" />
+              <AboutStatItem value="45%" label="Cost Reduction" />
             </div>
           </div>
           

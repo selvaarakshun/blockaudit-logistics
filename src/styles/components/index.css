@@ -1,5 +1,7 @@
 
 /* Import all component styles */
 @import './navbar.css';
+@import './auth.css';
+@import './about.css';
 
 /* Add more component imports here as needed */

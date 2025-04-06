@@ -1,6 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
-@import './components/navbar.css';
+@import './components/index.css';
 @import './animations.css';
 @import './utilities.css';
 
@@ -45,10 +45,6 @@
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-muted-foreground/30;
   }
-}
-
-@layer components {
-  /* ... keep existing code (component styles) */
 }
 
 /* Font family */

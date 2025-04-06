@@ -9,7 +9,7 @@ interface AboutHeroProps {
 
 const AboutHero = ({ scrollToSection }: AboutHeroProps) => {
   return (
-    <section className="relative py-20 border-b border-border overflow-hidden">
+    <section className="about-hero">
       <div className="absolute inset-0 -z-10">
         <BlockchainAnimation />
         <div className="absolute inset-0 bg-white/90 dark:bg-logistics-dark/90"></div>

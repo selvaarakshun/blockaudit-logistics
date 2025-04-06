@@ -60,11 +60,11 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="bg-white dark:bg-logistics-dark/80 p-6 rounded-lg shadow-md w-full max-w-md">
-      <h2 className="text-2xl font-bold mb-6 text-center">Login to your account</h2>
+    <div>
+      <h2 className="auth-title">Login to your account</h2>
       
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="auth-form">
           <FormField
             control={form.control}
             name="username"
@@ -95,7 +95,7 @@ const LoginForm = () => {
           
           <Button 
             type="submit" 
-            className="w-full mt-6" 
+            className="auth-button" 
             disabled={isLoading}
           >
             {isLoading ? (

@@ -1,13 +1,37 @@
 
 import { Search, Database, Shield, Clock } from 'lucide-react';
+import BenefitItem from './BenefitItem';
 
 const BenefitsSection = () => {
+  const benefits = [
+    {
+      title: 'Enhanced Transparency',
+      description: 'Complete visibility into your supply chain with an immutable record of all movements and transactions.',
+      icon: <Search className="size-6" />
+    },
+    {
+      title: 'Reduced Costs',
+      description: 'Eliminate intermediaries, paperwork, and manual verification processes through automation.',
+      icon: <Database className="size-6" />
+    },
+    {
+      title: 'Improved Security',
+      description: 'Cryptographic security ensures your data cannot be tampered with or falsified.',
+      icon: <Shield className="size-6" />
+    },
+    {
+      title: 'Faster Settlements',
+      description: 'Smart contracts automatically trigger payments when predefined conditions are met.',
+      icon: <Clock className="size-6" />
+    }
+  ];
+
   return (
-    <section className="py-16 md:py-24">
+    <section className="about-section">
       <div className="container">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Benefits for Your Business</h2>
-          <p className="text-lg text-logistics-gray">
+          <h2 className="section-title">Benefits for Your Business</h2>
+          <p className="section-description">
             GuudzChain delivers tangible results for logistics companies, manufacturers, and retailers through blockchain-powered transparency.
           </p>
         </div>
@@ -15,37 +39,13 @@ const BenefitsSection = () => {
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div>
             <div className="space-y-8">
-              {[
-                {
-                  title: 'Enhanced Transparency',
-                  description: 'Complete visibility into your supply chain with an immutable record of all movements and transactions.',
-                  icon: <Search className="size-6" />
-                },
-                {
-                  title: 'Reduced Costs',
-                  description: 'Eliminate intermediaries, paperwork, and manual verification processes through automation.',
-                  icon: <Database className="size-6" />
-                },
-                {
-                  title: 'Improved Security',
-                  description: 'Cryptographic security ensures your data cannot be tampered with or falsified.',
-                  icon: <Shield className="size-6" />
-                },
-                {
-                  title: 'Faster Settlements',
-                  description: 'Smart contracts automatically trigger payments when predefined conditions are met.',
-                  icon: <Clock className="size-6" />
-                }
-              ].map((benefit, index) => (
-                <div key={index} className="flex gap-5">
-                  <div className="flex-shrink-0 size-12 rounded-full bg-logistics-light-blue dark:bg-logistics-blue/10 flex items-center justify-center text-logistics-blue">
-                    {benefit.icon}
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2">{benefit.title}</h3>
-                    <p className="text-logistics-gray">{benefit.description}</p>
-                  </div>
-                </div>
+              {benefits.map((benefit, index) => (
+                <BenefitItem 
+                  key={index}
+                  icon={benefit.icon}
+                  title={benefit.title}
+                  description={benefit.description}
+                />
               ))}
             </div>
           </div>

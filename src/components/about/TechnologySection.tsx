@@ -1,6 +1,7 @@
 
 import { Shield, Link as LinkIcon, Share2, Clock, CheckCircle2 } from 'lucide-react';
 import { ArrowRight } from 'lucide-react';
+import FeatureCard from './FeatureCard';
 
 const TechnologySection = () => {
   const features = [
@@ -27,27 +28,23 @@ const TechnologySection = () => {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-logistics-light-gray dark:bg-logistics-dark/50">
+    <section className="about-section-alt">
       <div className="container">
         <div className="max-w-3xl mx-auto text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Our Technology</h2>
-          <p className="text-lg text-logistics-gray">
+          <h2 className="section-title">Our Technology</h2>
+          <p className="section-description">
             GuudzChain combines private and public blockchain technologies to create a flexible, scalable solution for supply chain management.
           </p>
         </div>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
-            <div 
-              key={index} 
-              className="bg-white dark:bg-logistics-dark shadow-medium rounded-xl p-6 border border-border transition-transform hover:scale-105"
-            >
-              <div className="size-14 rounded-md bg-logistics-light-blue dark:bg-logistics-blue/10 flex items-center justify-center mb-5 text-logistics-blue">
-                {feature.icon}
-              </div>
-              <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-              <p className="text-logistics-gray">{feature.description}</p>
-            </div>
+            <FeatureCard 
+              key={index}
+              icon={feature.icon}
+              title={feature.title}
+              description={feature.description}
+            />
           ))}
         </div>
         

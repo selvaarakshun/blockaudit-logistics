@@ -1,0 +1,41 @@
+
+/* About page styling */
+.about-hero {
+  @apply relative py-20 border-b border-border overflow-hidden;
+}
+
+.about-section {
+  @apply py-16 md:py-24;
+}
+
+.about-section-alt {
+  @apply py-16 md:py-24 bg-logistics-light-gray dark:bg-logistics-dark/50;
+}
+
+.about-card {
+  @apply bg-white dark:bg-logistics-dark rounded-xl p-6 border border-border shadow-subtle hover:shadow-medium transition-all;
+}
+
+.about-icon-container {
+  @apply size-14 rounded-md bg-logistics-light-blue dark:bg-logistics-blue/10 flex items-center justify-center mb-5 text-logistics-blue;
+}
+
+.about-stat {
+  @apply text-3xl font-bold text-logistics-blue mb-2;
+}
+
+.about-stat-label {
+  @apply text-logistics-gray;
+}
+
+.about-navigation-dot {
+  @apply size-3 rounded-full transition-all duration-300;
+}
+
+.about-navigation-dot-active {
+  @apply bg-logistics-blue size-4;
+}
+
+.about-navigation-dot-inactive {
+  @apply bg-logistics-gray/50 group-hover:bg-logistics-gray;
+}

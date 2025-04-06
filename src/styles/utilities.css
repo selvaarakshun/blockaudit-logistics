@@ -20,14 +20,36 @@
   @apply shadow-[0_8px_30px_rgba(0,0,0,0.12)];
 }
 
-.full-screen {
-  @apply min-h-screen w-full;
-}
+@layer components {
+  .full-screen {
+    @apply min-h-screen w-full;
+  }
+  
+  .full-width {
+    @apply w-full;
+  }
+  
+  .container-responsive {
+    @apply container px-4 md:px-6 mx-auto max-w-7xl;
+  }
 
-.full-width {
-  @apply w-full;
-}
-
-.container-responsive {
-  @apply container px-4 md:px-6 mx-auto max-w-7xl;
+  .btn-primary {
+    @apply bg-logistics-blue text-white hover:bg-logistics-blue/80 px-4 py-2 rounded-md font-medium transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply border border-logistics-blue/30 text-logistics-blue hover:bg-logistics-blue/10 px-4 py-2 rounded-md font-medium transition-colors;
+  }
+  
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+  
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold mb-6;
+  }
+  
+  .section-description {
+    @apply text-lg text-logistics-gray mb-8;
+  }
 }
