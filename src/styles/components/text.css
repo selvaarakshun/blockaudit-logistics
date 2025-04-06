@@ -1,0 +1,12 @@
+
+/* Text utilities */
+@layer components {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  /* Gradient text */
+  .text-gradient {
+    @apply bg-gradient-to-r from-logistics-blue to-logistics-indigo bg-clip-text text-transparent;
+  }
+}

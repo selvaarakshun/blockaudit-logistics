@@ -1,9 +1,14 @@
 
-
 /* Import all component styles */
 @import './navbar.css';
 @import './auth.css';
 @import './about.css';
+@import './buttons.css';
+@import './cards.css';
+@import './status.css';
+@import './layout.css';
+@import './forms.css';
+@import './text.css';
 
 /* Add animation classes */
 .animate-hover-lift {
@@ -26,15 +31,4 @@
   @apply backdrop-blur-md bg-white/80 dark:bg-logistics-dark/80 border border-white/20 dark:border-white/5 rounded-2xl shadow-subtle;
 }
 
-/* Button styling with curved edges */
-.btn {
-  @apply rounded-xl transition-all transform hover:-translate-y-1 active:translate-y-0;
-}
-
-/* Input field styling with curved edges */
-.form-input {
-  @apply rounded-xl border-border focus:ring-2 focus:ring-logistics-blue focus:border-transparent transition-all;
-}
-
 /* Add more component imports here as needed */
-

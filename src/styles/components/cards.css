@@ -1,0 +1,17 @@
+
+/* Card styles */
+@layer components {
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-medium;
+  }
+  
+  /* Enhanced card styling */
+  .enhanced-card {
+    @apply bg-white dark:bg-logistics-dark/50 border border-border rounded-xl shadow-subtle transition-all hover:shadow-medium;
+  }
+  
+  /* Glass and card styling */
+  .glass-card {
+    @apply backdrop-blur-md bg-white/80 dark:bg-black/50 border border-white/20 dark:border-white/10 rounded-2xl;
+  }
+}

@@ -1,0 +1,48 @@
+
+/* Status indicators */
+@layer components {
+  .status-dot {
+    @apply inline-block size-2 rounded-full mr-2;
+  }
+  
+  .status-dot-success {
+    @apply status-dot bg-logistics-success;
+  }
+  
+  .status-dot-warning {
+    @apply status-dot bg-logistics-warning;
+  }
+  
+  .status-dot-error {
+    @apply status-dot bg-logistics-error;
+  }
+  
+  .status-dot-neutral {
+    @apply status-dot bg-logistics-gray;
+  }
+  
+  /* Badge styles */
+  .badge {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+  }
+  
+  .badge-blue {
+    @apply badge bg-logistics-blue/10 text-logistics-blue;
+  }
+  
+  .badge-green {
+    @apply badge bg-logistics-success/10 text-logistics-success;
+  }
+  
+  .badge-yellow {
+    @apply badge bg-logistics-warning/10 text-logistics-warning;
+  }
+  
+  .badge-red {
+    @apply badge bg-logistics-error/10 text-logistics-error;
+  }
+  
+  .badge-gray {
+    @apply badge bg-logistics-gray/10 text-logistics-gray;
+  }
+}
