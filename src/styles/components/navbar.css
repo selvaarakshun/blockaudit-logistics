@@ -18,12 +18,12 @@
 }
 
 .navbar-logo-icon {
-  @apply flex items-center justify-center size-8 bg-gradient-to-r from-logistics-blue to-logistics-indigo rounded-md text-white shadow-subtle;
+  @apply flex items-center justify-center size-8 bg-gradient-to-r from-logistics-blue to-logistics-indigo rounded-xl text-white shadow-subtle;
 }
 
 /* Desktop menu items */
 .navbar-menu-item {
-  @apply px-4 py-2 rounded-md text-sm font-medium transition-all inline-block;
+  @apply px-4 py-2 rounded-xl text-sm font-medium transition-all inline-block;
 }
 
 .navbar-menu-item-active {
@@ -35,11 +35,11 @@
 }
 
 .navbar-dropdown {
-  @apply bg-white dark:bg-logistics-dark p-4 rounded-md shadow-medium min-w-[320px];
+  @apply bg-white dark:bg-logistics-dark p-4 rounded-xl shadow-medium min-w-[320px];
 }
 
 .navbar-dropdown-item {
-  @apply block p-2 rounded-md hover:bg-logistics-light-gray dark:hover:bg-white/5;
+  @apply block p-2 rounded-xl hover:bg-logistics-light-gray dark:hover:bg-white/5;
 }
 
 /* Mobile menu */
@@ -48,7 +48,7 @@
 }
 
 .navbar-mobile-item {
-  @apply px-4 py-3 rounded-md text-sm font-medium;
+  @apply px-4 py-3 rounded-xl text-sm font-medium;
 }
 
 .navbar-mobile-item-active {
@@ -60,5 +60,5 @@
 }
 
 .navbar-mobile-dropdown {
-  @apply flex items-center justify-between px-4 py-3 rounded-md text-sm font-medium bg-logistics-light-gray dark:bg-white/5;
+  @apply flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium bg-logistics-light-gray dark:bg-white/5;
 }

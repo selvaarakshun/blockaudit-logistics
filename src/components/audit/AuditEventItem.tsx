@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { Shield, AlertCircle, File, User, Clock, Download, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import BlockchainVerification from '../blockchain/verification';
 import { AuditEvent } from '@/types/audit';
@@ -72,8 +73,11 @@ const AuditEventItem = ({ event }: AuditEventItemProps) => {
   };
 
   return (
-    <div 
-      className="rounded-lg border border-border overflow-hidden bg-white dark:bg-logistics-dark/50 transition-all hover:shadow-subtle"
+    <motion.div 
+      className="rounded-2xl border border-border overflow-hidden bg-white dark:bg-logistics-dark/50 transition-all hover:shadow-medium"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
     >
       <div 
         className="p-4 cursor-pointer"
@@ -82,7 +86,7 @@ const AuditEventItem = ({ event }: AuditEventItemProps) => {
         <div className="flex justify-between items-start">
           <div className="flex items-center gap-3">
             <div className={cn(
-              "flex items-center justify-center size-10 rounded-md",
+              "flex items-center justify-center size-10 rounded-xl",
               getEventTypeColor(event.type)
             )}>
               {getEventIcon(event.type)}
@@ -117,43 +121,57 @@ const AuditEventItem = ({ event }: AuditEventItemProps) => {
         <p className="mt-2 text-sm">{event.details}</p>
       </div>
 
-      {isExpanded && (
-        <div className="px-4 pb-4 pt-2 border-t border-border mt-2 animate-fade-in">
-          <BlockchainVerification 
-            status={event.verified ? 'verified' : 'loading'} 
-            txHash={event.hash || '0x7f9a82a53b1a4372765c4463c3cc1de7b4c5e6c17799fbca3fb48f04b343f9c1'}
-            timestamp={event.timestamp}
-          />
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div 
+            className="px-4 pb-4 pt-2 border-t border-border mt-2"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <BlockchainVerification 
+              status={event.verified ? 'verified' : 'loading'} 
+              txHash={event.hash || '0x7f9a82a53b1a4372765c4463c3cc1de7b4c5e6c17799fbca3fb48f04b343f9c1'}
+              timestamp={event.timestamp}
+            />
 
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            <button 
-              className="btn-secondary text-xs h-8 flex items-center gap-1"
-              onClick={handleDownloadEvidence}
-            >
-              <Download className="size-3" />
-              <span>Download Evidence</span>
-            </button>
-            <button 
-              className="btn-ghost text-xs h-8"
-              onClick={handleViewDetails}
-            >
-              View Full Details
-            </button>
-            {event.hash && (
-              <a 
-                href={`/blockchain-explorer?hash=${event.hash}`}
-                className="btn-ghost text-xs h-8 flex items-center gap-1 text-logistics-blue"
-                target="_blank"
-                rel="noopener noreferrer"
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <motion.button 
+                className="btn-secondary text-xs h-8 flex items-center gap-1 rounded-xl"
+                onClick={handleDownloadEvidence}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <ExternalLink className="size-3" />
-                <span>View on Blockchain</span>
-              </a>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
+                <Download className="size-3" />
+                <span>Download Evidence</span>
+              </motion.button>
+              <motion.button 
+                className="btn-ghost text-xs h-8 rounded-xl"
+                onClick={handleViewDetails}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                View Full Details
+              </motion.button>
+              {event.hash && (
+                <motion.a 
+                  href={`/blockchain-explorer?hash=${event.hash}`}
+                  className="btn-ghost text-xs h-8 flex items-center gap-1 text-logistics-blue rounded-xl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <ExternalLink className="size-3" />
+                  <span>View on Blockchain</span>
+                </motion.a>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 

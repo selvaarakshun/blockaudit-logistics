@@ -5,7 +5,7 @@
 }
 
 .auth-card {
-  @apply bg-white dark:bg-logistics-dark/80 p-6 rounded-lg shadow-medium w-full max-w-md border border-border;
+  @apply bg-white dark:bg-logistics-dark/80 p-8 rounded-2xl shadow-medium w-full max-w-md border border-border;
 }
 
 .auth-title {
@@ -13,17 +13,17 @@
 }
 
 .auth-link {
-  @apply text-logistics-blue hover:text-logistics-blue/80 underline-offset-2 hover:underline;
+  @apply text-logistics-blue hover:text-logistics-blue/80 underline-offset-2 hover:underline transition-colors;
 }
 
 .auth-form {
-  @apply space-y-4;
+  @apply space-y-5;
 }
 
 .auth-button {
-  @apply w-full mt-6;
+  @apply w-full mt-6 rounded-xl py-3 font-medium transition-all transform hover:scale-[1.02] active:scale-[0.98];
 }
 
 .auth-alert {
-  @apply mb-6 bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-900/20 dark:border-amber-800/30 dark:text-amber-300;
+  @apply mb-6 bg-amber-50 border-amber-200 text-amber-800 dark:bg-amber-900/20 dark:border-amber-800/30 dark:text-amber-300 rounded-xl p-4;
 }

@@ -1,5 +1,5 @@
 
-import { LucideIcon } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface FeatureCardProps {
   icon: React.ReactNode;
@@ -9,13 +9,17 @@ interface FeatureCardProps {
 
 const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
   return (
-    <div className="about-card transition-transform hover:scale-105">
-      <div className="about-icon-container">
+    <motion.div 
+      className="about-card h-full"
+      whileHover={{ y: -8 }}
+      transition={{ type: "spring", stiffness: 300 }}
+    >
+      <div className="about-icon-container bg-gradient-to-br from-logistics-light-blue to-logistics-blue/20">
         {icon}
       </div>
       <h3 className="text-xl font-semibold mb-3">{title}</h3>
       <p className="text-logistics-gray">{description}</p>
-    </div>
+    </motion.div>
   );
 };
 

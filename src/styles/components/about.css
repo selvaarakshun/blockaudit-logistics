@@ -13,11 +13,11 @@
 }
 
 .about-card {
-  @apply bg-white dark:bg-logistics-dark rounded-xl p-6 border border-border shadow-subtle hover:shadow-medium transition-all;
+  @apply bg-white dark:bg-logistics-dark rounded-2xl p-6 border border-border shadow-subtle hover:shadow-medium transition-all hover:translate-y-[-5px];
 }
 
 .about-icon-container {
-  @apply size-14 rounded-md bg-logistics-light-blue dark:bg-logistics-blue/10 flex items-center justify-center mb-5 text-logistics-blue;
+  @apply size-14 rounded-xl bg-logistics-light-blue dark:bg-logistics-blue/10 flex items-center justify-center mb-5 text-logistics-blue;
 }
 
 .about-stat {
