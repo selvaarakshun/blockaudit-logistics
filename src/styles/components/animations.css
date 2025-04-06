@@ -1,0 +1,51 @@
+
+/* Animation utilities for components */
+@layer components {
+  .fade-in {
+    @apply animate-fade-in;
+  }
+  
+  .slide-down {
+    @apply animate-slide-down;
+  }
+  
+  .scale-in {
+    @apply animate-scale;
+  }
+  
+  .hover-scale {
+    @apply transition-transform hover:scale-105 active:scale-95;
+  }
+  
+  .hover-lift {
+    @apply transition-transform hover:-translate-y-1;
+  }
+  
+  .hover-glow {
+    @apply transition-shadow hover:shadow-md hover:shadow-primary/20;
+  }
+  
+  .spin {
+    @apply animate-spin;
+  }
+  
+  .pulse {
+    @apply animate-pulse;
+  }
+  
+  .animate-once {
+    animation-iteration-count: 1;
+  }
+  
+  .animate-twice {
+    animation-iteration-count: 2;
+  }
+  
+  .animate-thrice {
+    animation-iteration-count: 3;
+  }
+  
+  .animate-infinite {
+    animation-iteration-count: infinite;
+  }
+}

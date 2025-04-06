@@ -9,6 +9,9 @@
 @import './layout.css';
 @import './forms.css';
 @import './text.css';
+@import './tables.css';
+@import './badges.css';
+@import './animations.css';
 
 /* Add animation classes */
 .animate-hover-lift {
@@ -30,5 +33,3 @@
 .glass-morphism {
   @apply backdrop-blur-md bg-white/80 dark:bg-logistics-dark/80 border border-white/20 dark:border-white/5 rounded-2xl shadow-subtle;
 }
-
-/* Add more component imports here as needed */

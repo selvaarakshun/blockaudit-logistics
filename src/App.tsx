@@ -3,11 +3,12 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { useEffect, useLayoutEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useLayoutEffect } from "react";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
+// Page imports
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
@@ -24,7 +25,14 @@ import DocumentationRequirements from "./pages/DocumentationRequirements";
 import UserManagement from "./pages/UserManagement";
 import ChatbotDialog from "./components/chat/ChatbotDialog";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
 
 // Enhanced ScrollToTop component that scrolls before the page transitions
 const ScrollToTop = () => {
@@ -50,80 +58,78 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <TooltipProvider>
+        <ScrollToTop />
+        <main id="main-content" tabIndex={-1} style={{ outline: 'none' }}>
+          <Routes>
+            {/* Public routes */}
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/about" element={<About />} />
+            
+            {/* Protected routes */}
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/audit-trail" element={
+              <ProtectedRoute>
+                <AuditTrailPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/blockchain-explorer" element={
+              <ProtectedRoute>
+                <BlockchainExplorer />
+              </ProtectedRoute>
+            } />
+            <Route path="/blockchain-dashboard" element={
+              <ProtectedRoute>
+                <BlockchainDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/settings" element={
+              <ProtectedRoute>
+                <Settings />
+              </ProtectedRoute>
+            } />
+            <Route path="/users" element={
+              <ProtectedRoute>
+                <UserManagement />
+              </ProtectedRoute>
+            } />
+            
+            {/* Tax Compliance Routes - Protected */}
+            <Route path="/tax-compliance" element={
+              <ProtectedRoute>
+                <TaxCompliance />
+              </ProtectedRoute>
+            } />
+            <Route path="/tax-compliance/icegate" element={
+              <ProtectedRoute>
+                <IcegatePage />
+              </ProtectedRoute>
+            } />
+            <Route path="/tax-compliance/duties" element={
+              <ProtectedRoute>
+                <TaxCompliance />
+              </ProtectedRoute>
+            } />
+            <Route path="/tax-compliance/documentation" element={
+              <ProtectedRoute>
+                <DocumentationRequirements />
+              </ProtectedRoute>
+            } />
+            
+            {/* Catch-all route */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+        
+        {/* Global chatbot that appears on all pages */}
+        <ChatbotDialog />
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <ScrollToTop />
-          <main id="main-content" tabIndex={-1} style={{ outline: 'none' }}>
-            <Routes>
-              {/* Public routes */}
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/about" element={<About />} />
-              
-              {/* Protected routes */}
-              <Route path="/dashboard" element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              } />
-              <Route path="/audit-trail" element={
-                <ProtectedRoute>
-                  <AuditTrailPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/blockchain-explorer" element={
-                <ProtectedRoute>
-                  <BlockchainExplorer />
-                </ProtectedRoute>
-              } />
-              <Route path="/blockchain-dashboard" element={
-                <ProtectedRoute>
-                  <BlockchainDashboard />
-                </ProtectedRoute>
-              } />
-              <Route path="/settings" element={
-                <ProtectedRoute>
-                  <Settings />
-                </ProtectedRoute>
-              } />
-              <Route path="/users" element={
-                <ProtectedRoute>
-                  <UserManagement />
-                </ProtectedRoute>
-              } />
-              
-              {/* Tax Compliance Routes - Protected */}
-              <Route path="/tax-compliance" element={
-                <ProtectedRoute>
-                  <TaxCompliance />
-                </ProtectedRoute>
-              } />
-              <Route path="/tax-compliance/icegate" element={
-                <ProtectedRoute>
-                  <IcegatePage />
-                </ProtectedRoute>
-              } />
-              <Route path="/tax-compliance/duties" element={
-                <ProtectedRoute>
-                  <TaxCompliance />
-                </ProtectedRoute>
-              } />
-              <Route path="/tax-compliance/documentation" element={
-                <ProtectedRoute>
-                  <DocumentationRequirements />
-                </ProtectedRoute>
-              } />
-              
-              {/* Catch-all route */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </main>
-          
-          {/* Global chatbot that appears on all pages */}
-          <ChatbotDialog />
-        </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>

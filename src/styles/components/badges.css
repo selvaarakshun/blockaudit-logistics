@@ -1,0 +1,43 @@
+
+/* Badge styles */
+@layer components {
+  .badge {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+  }
+  
+  .badge-blue {
+    @apply badge bg-logistics-blue/10 text-logistics-blue;
+  }
+  
+  .badge-green {
+    @apply badge bg-logistics-success/10 text-logistics-success;
+  }
+  
+  .badge-yellow {
+    @apply badge bg-logistics-warning/10 text-logistics-warning;
+  }
+  
+  .badge-red {
+    @apply badge bg-logistics-error/10 text-logistics-error;
+  }
+  
+  .badge-gray {
+    @apply badge bg-logistics-gray/10 text-logistics-gray;
+  }
+  
+  .badge-pill {
+    @apply badge px-3;
+  }
+  
+  .badge-outline {
+    @apply badge bg-transparent border border-current;
+  }
+  
+  .badge-dot {
+    @apply relative pl-5;
+  }
+  
+  .badge-dot:before {
+    @apply content-[''] absolute left-2 top-1/2 -translate-y-1/2 size-2 rounded-full bg-current;
+  }
+}

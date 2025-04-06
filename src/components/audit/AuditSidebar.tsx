@@ -5,7 +5,6 @@ import EventCategories from './EventCategories';
 import RecentDocuments from './RecentDocuments';
 import ExportSection from './ExportSection';
 import DocumentUpload from './DocumentUpload';
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const AuditSidebar = () => {
@@ -18,7 +17,7 @@ const AuditSidebar = () => {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
     >
-      <div className="bg-white dark:bg-logistics-dark/60 rounded-2xl p-5 shadow-subtle border border-border">
+      <SidebarCard>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="w-full grid grid-cols-2 mb-4 rounded-xl bg-logistics-light-gray dark:bg-logistics-dark p-1">
             <TabsTrigger 
@@ -44,13 +43,24 @@ const AuditSidebar = () => {
             <EventCategories />
           </TabsContent>
         </Tabs>
-      </div>
+      </SidebarCard>
       
-      <div className="bg-white dark:bg-logistics-dark/60 rounded-2xl p-5 shadow-subtle border border-border">
+      <SidebarCard>
         <ExportSection />
-      </div>
+      </SidebarCard>
     </motion.div>
   );
 };
+
+interface SidebarCardProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+const SidebarCard = ({ children, className }: SidebarCardProps) => (
+  <div className={`bg-white dark:bg-logistics-dark/60 rounded-2xl p-5 shadow-subtle border border-border ${className || ''}`}>
+    {children}
+  </div>
+);
 
 export default AuditSidebar;
