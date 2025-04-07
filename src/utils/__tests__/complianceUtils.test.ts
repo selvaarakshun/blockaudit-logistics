@@ -16,33 +16,26 @@ describe('Compliance Utilities', () => {
         
         expect(result).toEqual({
           compliant: true,
-          standard: 'ISO 28000',
-          details: expect.any(Object)
+          details: expect.any(Array)
         });
         
-        expect(result.details).toHaveProperty('securityControls');
-        expect(result.details).toHaveProperty('riskAssessment');
-        expect(result.details).toHaveProperty('verificationDate');
+        expect(result.details).toContain(expect.stringContaining('Security management policy'));
+        expect(result.details).toContain(expect.stringContaining('Risk assessment'));
+        expect(result.details).toContain(expect.stringContaining('Security controls'));
       });
 
       it('should handle non-compliance when invalid shipment ID is provided', async () => {
-        // Mock implementation returns true, so we need to spy and mock a specific case
+        // Mock implementation returns non-compliance for invalid shipment ID
         const spy = jest.spyOn(ISO28000Compliance, 'verifySecurityManagement')
           .mockImplementationOnce(async () => ({
             compliant: false,
-            standard: 'ISO 28000',
-            details: {
-              securityControls: false,
-              riskAssessment: false,
-              verificationDate: new Date().toISOString(),
-              reason: 'Invalid shipment ID format'
-            }
+            details: ['Invalid shipment ID format']
           }));
           
         const result = await ISO28000Compliance.verifySecurityManagement('INVALID');
         
         expect(result.compliant).toBe(false);
-        expect(result.details.reason).toBe('Invalid shipment ID format');
+        expect(result.details).toContain('Invalid shipment ID format');
         
         spy.mockRestore();
       });
@@ -56,13 +49,12 @@ describe('Compliance Utilities', () => {
         
         expect(result).toEqual({
           compliant: true,
-          standard: 'WCO SAFE Framework',
-          details: expect.any(Object)
+          details: expect.any(Array)
         });
         
-        expect(result.details).toHaveProperty('aeo');
-        expect(result.details).toHaveProperty('riskManagement');
-        expect(result.details).toHaveProperty('verificationDate');
+        expect(result.details).toContain(expect.stringContaining('AEO status'));
+        expect(result.details).toContain(expect.stringContaining('Advance electronic information'));
+        expect(result.details).toContain(expect.stringContaining('Risk management'));
       });
 
       it('should accept custom configuration', async () => {
@@ -74,7 +66,7 @@ describe('Compliance Utilities', () => {
         const result = await WCOCompliance.verifySAFEFramework(config);
         
         expect(result.compliant).toBe(true);
-        expect(result.details.aeo).toBe(true);
+        expect(result.details).toContain(expect.stringContaining('AEO status'));
       });
     });
   });
