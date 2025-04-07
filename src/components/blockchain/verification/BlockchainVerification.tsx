@@ -5,7 +5,7 @@ import VerificationHeader from './VerificationHeader';
 import VerificationDetails from './VerificationDetails';
 import VerificationActions from './VerificationActions';
 import VerificationHistory from './VerificationHistory';
-import { verifyDocumentOnChain, getDocumentHistory } from '@/utils/smartContractUtils';
+import { verifyDocumentOnChain, getDocumentHistory } from '@/utils/documentUtils';
 import { toast } from '@/components/ui/use-toast';
 
 export type BlockchainVerificationStatus = 'loading' | 'verified' | 'unverified';

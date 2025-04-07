@@ -1,10 +1,9 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Shield, BookOpen, CheckCircle } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
-import { ISO28000Compliance, WCOCompliance } from '@/utils/smartContractUtils';
+import { ISO28000Compliance, WCOCompliance } from '@/utils/complianceUtils';
 
 const StandardsComplianceCard = () => {
   const [showStandards, setShowStandards] = useState(false);

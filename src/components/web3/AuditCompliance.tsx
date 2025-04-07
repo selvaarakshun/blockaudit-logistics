@@ -5,7 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FileText, Upload, CheckCircle, XCircle, AlertTriangle, Database, Shield } from 'lucide-react';
-import { verifyDocumentOnChain, getDocumentHistory, ISO28000Compliance, WCOCompliance } from '@/utils/smartContractUtils';
+import { verifyDocumentOnChain, getDocumentHistory } from '@/utils/documentUtils';
+import { ISO28000Compliance, WCOCompliance } from '@/utils/complianceUtils';
 import { toast } from '@/components/ui/use-toast';
 
 // Mock document data
