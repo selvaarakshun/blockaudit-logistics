@@ -129,7 +129,7 @@ export const ShipmentProvider = ({ children }: { children: ReactNode }) => {
     const newShipment: Shipment = {
       id: `${Date.now()}`,
       trackingNumber: `SHP-${Math.floor(Math.random() * 10000000)}`,
-      status: shipmentData.status || 'pending', // Use provided status or default to 'pending'
+      status: shipmentData.status || 'pending',
       origin: shipmentData.origin,
       destination: shipmentData.destination,
       estimatedDelivery: shipmentData.estimatedDelivery,
