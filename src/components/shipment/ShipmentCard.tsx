@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Package, Calendar, ArrowRight, Clock, Box, ChevronDown, ChevronUp } from 'lucide-react';
 import { Shipment } from '@/types/shipment';
 import ShipmentCardDetails from './ShipmentCardDetails';
+import { formatDate, getStatusColors, formatStatusText } from '@/utils/shipmentCardUtils';
 
 interface ShipmentCardProps {
   shipment: Shipment;
@@ -10,21 +11,6 @@ interface ShipmentCardProps {
 
 const ShipmentCard = ({ shipment }: ShipmentCardProps) => {
   const [showTrackingDetails, setShowTrackingDetails] = useState(false);
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
-
-  const statusColors = {
-    'pending': 'bg-amber-100 text-amber-800 border-amber-200',
-    'in-transit': 'bg-blue-100 text-blue-800 border-blue-200',
-    'delivered': 'bg-green-100 text-green-800 border-green-200',
-    'delayed': 'bg-red-100 text-red-800 border-red-200'
-  };
 
   return (
     <div className="bg-white dark:bg-gray-800/50 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200 overflow-hidden">
@@ -36,8 +22,8 @@ const ShipmentCard = ({ shipment }: ShipmentCardProps) => {
               {shipment.shipmentName || `Shipment to ${shipment.destination}`}
             </h3>
           </div>
-          <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${statusColors[shipment.status]}`}>
-            {shipment.status.replace('-', ' ')}
+          <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${getStatusColors(shipment.status)}`}>
+            {formatStatusText(shipment.status)}
           </span>
         </div>
         

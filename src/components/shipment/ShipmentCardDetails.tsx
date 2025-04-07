@@ -6,36 +6,15 @@ import ShipmentProgress from './ShipmentProgress';
 import ShipmentEnvironmentData from './ShipmentEnvironmentData';
 import ShipmentTrackingHistory from './ShipmentTrackingHistory';
 import ShipmentDetailsSection from './ShipmentDetailsSection';
+import { getProgressPercentage, generateTrackingEnvironmentData } from '@/utils/shipmentCardUtils';
 
 interface ShipmentCardDetailsProps {
   shipment: Shipment;
 }
 
 const ShipmentCardDetails = ({ shipment }: ShipmentCardDetailsProps) => {
-  const getProgressPercentage = () => {
-    switch (shipment.status) {
-      case 'pending': return 25;
-      case 'in-transit': return 60;
-      case 'delivered': return 100;
-      case 'delayed': return 60;
-      default: return 0;
-    }
-  };
-
-  const getTrackingEnvironmentData = () => {
-    const idNum = parseInt(shipment.id) || 1;
-    return {
-      temperature: (Math.sin(idNum * 0.5) * 3 + 5).toFixed(1),
-      humidity: Math.floor(Math.sin(idNum * 0.3) * 10 + 45),
-      batteryLevel: Math.floor(Math.sin(idNum * 0.7) * 15 + 75),
-      signalStrength: Math.floor(Math.sin(idNum * 0.9) * 10 + 85),
-      shocks: shipment.status === 'delayed' ? 3 : 0,
-      lastDataUpdate: new Date(new Date(shipment.lastUpdated).getTime() - 30 * 60000).toISOString()
-    };
-  };
-
-  const environmentData = getTrackingEnvironmentData();
-  const progressPercentage = getProgressPercentage();
+  const progressPercentage = getProgressPercentage(shipment.status);
+  const environmentData = generateTrackingEnvironmentData(shipment);
 
   return (
     <div className="p-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700">
