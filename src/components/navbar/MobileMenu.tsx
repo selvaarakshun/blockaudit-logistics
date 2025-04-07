@@ -1,17 +1,21 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from "@/lib/utils";
 import { ChevronDown } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
-type MobileMenuProps = {
-  isOpen: boolean;
-  navLinks: Array<{ name: string; path: string }>;
-  isActive: (path: string) => boolean;
+export type MobileMenuProps = {
+  isOpen?: boolean;
+  navLinks?: Array<{ name: string; path: string }>;
+  isActive?: (path: string) => boolean;
 };
 
-const MobileMenu = ({ isOpen, navLinks, isActive }: MobileMenuProps) => {
+const MobileMenu = ({ 
+  isOpen = false, 
+  navLinks = [], 
+  isActive = () => false 
+}: MobileMenuProps) => {
   const location = useLocation();
   const { isAuthenticated, logout } = useAuth();
 

@@ -5,6 +5,13 @@ import { Wallet, CircleDollarSign } from 'lucide-react';
 import { toast } from '@/components/ui/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
+// Define the window.ethereum type
+declare global {
+  interface Window {
+    ethereum?: any;
+  }
+}
+
 const WalletConnection = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState('');

@@ -67,7 +67,7 @@ const Navbar = () => {
         <Logo />
 
         {/* Desktop Navigation */}
-        {isAboveMd && <DesktopNav navLinks={navLinks} isActive={isActive} />}
+        {isAboveMd && <DesktopNav />}
 
         {/* Mobile Menu Toggle */}
         {!isAboveMd && (
