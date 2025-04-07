@@ -1,6 +1,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Download } from 'lucide-react';
 
 interface AppInfo {
   appName: string;
@@ -18,11 +20,9 @@ const ElectronInfo = () => {
 
     // Get app info if running in Electron
     if (window.isElectron && window.electron) {
-      window.electron.on('app-info-reply', (info: AppInfo) => {
+      window.electron.getAppInfo().then((info: AppInfo) => {
         setAppInfo(info);
       });
-      
-      window.electron.getAppInfo();
     }
   }, []);
 
@@ -36,9 +36,15 @@ const ElectronInfo = () => {
         <CardContent>
           <p>The BlockAudit Logistics software can also be used as a desktop application.</p>
           <p className="mt-2">To run it as a desktop app, use the Electron setup script:</p>
-          <pre className="bg-gray-100 dark:bg-gray-800 p-2 rounded mt-2 text-sm overflow-x-auto">
+          <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md mt-2 text-sm overflow-x-auto">
             node electron/setup.js
           </pre>
+          <div className="mt-4">
+            <Button className="gap-2">
+              <Download className="h-4 w-4" />
+              Download Desktop Version
+            </Button>
+          </div>
         </CardContent>
       </Card>
     );

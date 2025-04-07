@@ -1,3 +1,4 @@
+
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const url = require('url');
@@ -52,10 +53,10 @@ app.on('activate', function () {
 });
 
 // Handle IPC messages from renderer
-ipcMain.on('app-info', (event) => {
-  event.reply('app-info-reply', {
+ipcMain.handle('app-info', async () => {
+  return {
     appName: 'BlockAudit Logistics',
     version: app.getVersion(),
     platform: process.platform
-  });
+  };
 });
