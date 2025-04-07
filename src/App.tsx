@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -24,6 +23,7 @@ import IcegatePage from "./pages/IcegatePage";
 import DocumentationRequirements from "./pages/DocumentationRequirements";
 import UserManagement from "./pages/UserManagement";
 import ChatbotDialog from "./components/chat/ChatbotDialog";
+import PaymentsDashboard from "./pages/PaymentsDashboard";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -86,6 +86,11 @@ const App = () => (
             <Route path="/blockchain-dashboard" element={
               <ProtectedRoute>
                 <BlockchainDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/payments" element={
+              <ProtectedRoute>
+                <PaymentsDashboard />
               </ProtectedRoute>
             } />
             <Route path="/settings" element={

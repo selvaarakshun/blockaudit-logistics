@@ -1,0 +1,63 @@
+
+/* Web3 specific styles */
+@layer components {
+  .wallet-connect-btn {
+    @apply flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-logistics-dark border border-border hover:border-primary/50 transition-all;
+  }
+  
+  .token-icon {
+    @apply w-6 h-6 rounded-full overflow-hidden flex-shrink-0;
+  }
+  
+  .transaction-item {
+    @apply flex items-center justify-between p-3 border-b border-border last:border-0;
+  }
+  
+  .transaction-pending {
+    @apply bg-amber-50 dark:bg-amber-950/20;
+  }
+  
+  .transaction-success {
+    @apply bg-green-50 dark:bg-green-950/20;
+  }
+  
+  .transaction-failed {
+    @apply bg-red-50 dark:bg-red-950/20;
+  }
+  
+  .milestone-item {
+    @apply relative pb-8 last:pb-0;
+  }
+  
+  .milestone-line {
+    @apply absolute left-3 top-8 bottom-0 w-0.5 bg-border;
+  }
+  
+  .milestone-complete .milestone-circle {
+    @apply bg-logistics-success text-white;
+  }
+  
+  .milestone-circle {
+    @apply size-6 rounded-full bg-muted flex items-center justify-center z-10 relative;
+  }
+  
+  .milestone-active .milestone-circle {
+    @apply ring-2 ring-offset-2 ring-primary;
+  }
+  
+  .milestone-pending .milestone-circle {
+    @apply bg-muted;
+  }
+  
+  .treasury-card {
+    @apply rounded-xl p-4 border border-border bg-white dark:bg-logistics-dark shadow-sm hover:shadow-md transition-shadow;
+  }
+  
+  .audit-doc-card {
+    @apply p-3 border border-border rounded-xl bg-white dark:bg-logistics-dark flex items-center gap-3;
+  }
+  
+  .blockchain-badge {
+    @apply text-xs px-2 py-0.5 rounded-md bg-primary/10 text-primary;
+  }
+}

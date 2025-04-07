@@ -1,86 +1,39 @@
 
 import { Link } from 'react-router-dom';
-import { cn } from "@/lib/utils";
+import Logo from './Logo';
 import { useAuth } from '@/context/AuthContext';
-import UserProfile from '@/components/auth/UserProfile';
-import { 
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuList,
-  NavigationMenuTrigger
-} from "@/components/ui/navigation-menu";
+import UserProfile from '../auth/UserProfile';
+import { Wallet } from 'lucide-react';
 
-type DesktopNavProps = {
-  navLinks: Array<{ name: string; path: string }>;
-  isActive: (path: string) => boolean;
-};
-
-const DesktopNav = ({ navLinks, isActive }: DesktopNavProps) => {
-  const { isAuthenticated } = useAuth();
-
+const DesktopNav = () => {
+  const { user } = useAuth();
+  
   return (
-    <div className="flex items-center gap-4">
-      <NavigationMenu>
-        <NavigationMenuList>
-          {navLinks.map((link) => (
-            link.path === '/tax-compliance' ? (
-              <NavigationMenuItem key={link.path}>
-                <NavigationMenuTrigger 
-                  className={cn(
-                    isActive(link.path) ? "navbar-menu-item-active" : "navbar-menu-item-inactive"
-                  )}
-                >
-                  {link.name}
-                </NavigationMenuTrigger>
-                <NavigationMenuContent className="navbar-dropdown">
-                  <ul className="grid gap-2">
-                    <li>
-                      <Link to="/tax-compliance/duties" className="navbar-dropdown-item">
-                        Customs Duties
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/tax-compliance/icegate" className="navbar-dropdown-item">
-                        ICEGATE Portal
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/tax-compliance/documentation" className="navbar-dropdown-item">
-                        Documentation Requirements
-                      </Link>
-                    </li>
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            ) : (
-              <NavigationMenuItem key={link.path}>
-                <Link
-                  to={link.path}
-                  className={cn(
-                    "navbar-menu-item",
-                    isActive(link.path) ? "navbar-menu-item-active" : "navbar-menu-item-inactive"
-                  )}
-                >
-                  {link.name}
-                </Link>
-              </NavigationMenuItem>
-            )
-          ))}
-        </NavigationMenuList>
-      </NavigationMenu>
-
-      {isAuthenticated ? (
-        <UserProfile />
-      ) : (
-        <div className="flex items-center gap-2">
-          <Link to="/login" className="btn-secondary text-sm">
-            Login
+    <div className="flex items-center gap-10">
+      <Link to="/" className="flex-shrink-0">
+        <Logo />
+      </Link>
+      
+      {user && (
+        <nav className="hidden md:flex items-center space-x-8">
+          <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
+            Dashboard
           </Link>
-          <Link to="/register" className="btn-primary text-sm">
-            Register
+          <Link to="/blockchain-explorer" className="text-sm font-medium hover:text-primary transition-colors">
+            Blockchain
           </Link>
-        </div>
+          <Link to="/payments" className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1">
+            <Wallet className="h-4 w-4" />
+            Payments
+          </Link>
+          <Link to="/audit-trail" className="text-sm font-medium hover:text-primary transition-colors">
+            Audit Trail
+          </Link>
+          <Link to="/tax-compliance" className="text-sm font-medium hover:text-primary transition-colors">
+            Compliance
+          </Link>
+          <UserProfile />
+        </nav>
       )}
     </div>
   );
