@@ -1,6 +1,6 @@
 
 import { Package, Truck, CheckCircle, AlertTriangle } from 'lucide-react';
-import { Shipment } from '@/pages/Dashboard';
+import { Shipment } from '@/types/shipment';
 
 interface DashboardStatsProps {
   shipments: Shipment[];

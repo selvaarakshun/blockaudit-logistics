@@ -1,6 +1,7 @@
+
 import { useState } from 'react';
 import { Package, Calendar, ArrowRight, Clock, Box, ChevronDown, ChevronUp, MapPin, Truck, AlertCircle, Battery, Thermometer, Droplets, Wifi } from 'lucide-react';
-import { Shipment } from '@/pages/Dashboard';
+import { Shipment } from '@/types/shipment';
 import { Progress } from '@/components/ui/progress';
 
 interface ShipmentCardProps {

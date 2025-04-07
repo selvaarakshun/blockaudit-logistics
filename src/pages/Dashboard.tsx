@@ -31,6 +31,8 @@ const DashboardContent = () => {
   const { addShipment } = useShipments();
 
   const handleNewShipment = (shipmentData: ShipmentFormValues) => {
+    // The shipmentData already has all the required fields from the form
+    // The status will be defaulted to 'pending' in the addShipment function
     addShipment(shipmentData);
   };
 

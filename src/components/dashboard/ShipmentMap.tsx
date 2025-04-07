@@ -1,6 +1,6 @@
 
 import { MapPin } from 'lucide-react';
-import { Shipment } from '@/pages/Dashboard';
+import { Shipment } from '@/types/shipment';
 
 interface ShipmentMapProps {
   shipments?: Shipment[];

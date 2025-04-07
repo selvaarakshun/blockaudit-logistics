@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Shipment } from '@/pages/Dashboard';
+import { Shipment } from '@/types/shipment';
 import MapErrorBoundary, { MapErrorFallback } from './MapErrorBoundary';
 import WorldScene from './WorldScene';
 

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { PerspectiveCamera } from '@react-three/drei';
 import { Vector3 } from 'three';
-import { Shipment } from '@/pages/Dashboard';
+import { Shipment } from '@/types/shipment';
 import Earth from './Earth';
 import ShipmentMarker from './ShipmentMarker';
 import FlightPath from './FlightPath';
