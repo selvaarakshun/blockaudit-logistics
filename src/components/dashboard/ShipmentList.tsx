@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import ShipmentCard from '@/components/ShipmentCard';
+import ShipmentCard from '@/components/shipment/ShipmentCard';
 import ShipmentFilter from '@/components/dashboard/ShipmentFilter';
 import { useShipments } from '@/context/ShipmentContext';
 
