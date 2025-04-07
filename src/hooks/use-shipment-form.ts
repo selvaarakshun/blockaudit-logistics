@@ -15,7 +15,8 @@ export function useShipmentForm(onSuccess?: (data: ShipmentFormValues) => void) 
       origin: '',
       destination: '',
       items: '', // This is correctly a string for the form input
-      estimatedDelivery: new Date().toISOString().split('T')[0] // Today's date as default
+      estimatedDelivery: new Date().toISOString().split('T')[0], // Today's date as default
+      status: 'pending' // Default status
     }
   });
 
@@ -32,7 +33,8 @@ export function useShipmentForm(onSuccess?: (data: ShipmentFormValues) => void) 
       // Convert to the proper ShipmentFormValues type (with items as number)
       const shipmentData: ShipmentFormValues = {
         ...data,
-        items: parseInt(data.items, 10)
+        items: parseInt(data.items, 10),
+        status: data.status || 'pending'
       };
       
       toast({

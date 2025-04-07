@@ -9,7 +9,8 @@ export const shipmentFormSchema = z.object({
   items: z.string()
     .refine(val => !isNaN(parseInt(val, 10)) && parseInt(val, 10) > 0, "Must be a positive number")
     .transform(val => parseInt(val, 10)), // Transform string to number after validation
-  estimatedDelivery: z.string().min(1, "Please select a delivery date")
+  estimatedDelivery: z.string().min(1, "Please select a delivery date"),
+  status: z.enum(['pending', 'in-transit', 'delivered', 'delayed']).default('pending')
 });
 
 // Explicitly define the input form type (before transformation)
@@ -19,6 +20,7 @@ export type ShipmentFormInputs = {
   destination: string;
   items: string; // This is a string in the form inputs
   estimatedDelivery: string;
+  status?: 'pending' | 'in-transit' | 'delivered' | 'delayed';
 };
 
 // The final values after Zod transforms them
