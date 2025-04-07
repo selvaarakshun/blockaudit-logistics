@@ -2,6 +2,7 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import MongoDBConfig from '@/components/settings/MongoDBConfig';
+import ElectronInfo from '@/components/settings/ElectronInfo';
 
 const Settings = () => {
   return (
@@ -17,6 +18,7 @@ const Settings = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
             <div className="md:col-span-8 space-y-8">
+              <ElectronInfo />
               <MongoDBConfig />
               
               {/* Add more configuration sections here as needed */}
