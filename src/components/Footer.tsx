@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { Github, Twitter, Linkedin } from 'lucide-react';
 
@@ -11,10 +10,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="flex items-center justify-center size-8 bg-logistics-blue rounded-md text-white">
-                GC
-              </div>
-              <span className="font-semibold text-lg tracking-tight">GuudzChain</span>
+              <span className="font-semibold text-lg tracking-tight">BlockAudit</span>
             </Link>
             <p className="text-sm text-logistics-gray mb-4 max-w-xs">
               Revolutionizing logistics and audit processes with blockchain technology for enhanced transparency and efficiency.
