@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { Github, Twitter, Linkedin } from 'lucide-react';
 
@@ -13,7 +14,7 @@ const Footer = () => {
               <span className="font-semibold text-lg tracking-tight">BlockAudit</span>
             </Link>
             <p className="text-sm text-logistics-gray mb-4 max-w-xs">
-              Revolutionizing logistics and audit processes with blockchain technology for enhanced transparency and efficiency.
+              Powered by GuudzChain, revolutionizing logistics and audit processes with blockchain technology for enhanced transparency and efficiency.
             </p>
             <div className="flex gap-4">
               <a href="#" className="text-logistics-gray hover:text-logistics-dark transition-colors" aria-label="GitHub">
@@ -61,7 +62,7 @@ const Footer = () => {
 
         <div className="border-t border-border mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-logistics-gray">
-            &copy; {currentYear} GuudzChain. All rights reserved.
+            &copy; {currentYear} BlockAudit. Powered by GuudzChain. All rights reserved.
           </p>
           <div className="flex gap-5">
             <a href="#" className="text-sm text-logistics-gray hover:text-logistics-dark transition-colors">

@@ -1,4 +1,3 @@
-
 import { ChevronRight, TrendingUp, Shield, FileText, Star, Award, Zap, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -14,12 +13,12 @@ const Hero = () => {
         <div className="max-w-3xl mx-auto text-center animate-fade-in">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-white/50 dark:bg-white/5 backdrop-blur-sm mb-6 animate-fade-in">
             <span className="size-2 bg-logistics-success rounded-full animate-pulse"></span>
-            <span className="text-sm text-logistics-gray">Blockchain Powered Logistics</span>
+            <span className="text-sm text-logistics-gray">GuudzChain Blockchain Powered Logistics</span>
           </div>
           
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 text-balance bg-gradient-to-r from-logistics-blue to-logistics-indigo bg-clip-text text-transparent dark:from-white dark:to-logistics-blue">
             Transparent Logistics & <br className="hidden sm:block" />
-            Compliance with GuudzChain
+            Compliance with BlockAudit
           </h1>
           
           <p className="text-lg md:text-xl text-logistics-gray max-w-2xl mx-auto mb-8 text-balance">
