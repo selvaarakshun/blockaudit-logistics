@@ -10,9 +10,8 @@ const Footer = () => {
       <div className="container py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="md:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <span className="font-semibold text-lg tracking-tight">BlockAudit</span>
-            </Link>
+            {/* Only one logo/heading, no repetition */}
+            <span className="font-semibold text-lg tracking-tight block mb-4">GuudzChain</span>
             <p className="text-sm text-logistics-gray mb-4 max-w-xs">
               Powered by GuudzChain, revolutionizing logistics and audit processes with blockchain technology for enhanced transparency and efficiency.
             </p>
@@ -62,7 +61,7 @@ const Footer = () => {
 
         <div className="border-t border-border mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-logistics-gray">
-            &copy; {currentYear} BlockAudit. Powered by GuudzChain. All rights reserved.
+            &copy; {currentYear} GuudzChain. All rights reserved.
           </p>
           <div className="flex gap-5">
             <a href="#" className="text-sm text-logistics-gray hover:text-logistics-dark transition-colors">

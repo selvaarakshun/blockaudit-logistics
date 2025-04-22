@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 
 const Logo = () => {
   return (
-    <Link to="/" className="navbar-logo flex items-center gap-2">
+    <Link to="/" className="navbar-logo flex items-center gap-2" aria-label="GuudzChain">
       <div className="size-8 bg-logistics-blue rounded-md text-white flex items-center justify-center text-sm font-bold">
-        BA
+        GC
       </div>
-      <span className="tracking-tight font-semibold">BlockAudit</span>
+      <span className="tracking-tight font-semibold">GuudzChain</span>
     </Link>
   );
 };
