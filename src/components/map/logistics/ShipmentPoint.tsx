@@ -114,11 +114,6 @@ const ShipmentPoint = ({ point, isActive, onPointClick }: ShipmentPointProps) =>
                 <Progress 
                   value={point.status === 'delivered' ? 100 : point.status === 'delayed' ? 60 : 75} 
                   className="h-1.5" 
-                  indicatorClassName={
-                    point.status === 'delivered' ? 'bg-green-500' : 
-                    point.status === 'delayed' ? 'bg-red-500' : 
-                    'bg-blue-500'
-                  }
                 />
               </div>
             </CardContent>

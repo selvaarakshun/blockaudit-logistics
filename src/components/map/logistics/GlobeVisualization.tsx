@@ -1,6 +1,8 @@
 
 import React from 'react';
 import { ShipmentPoint as ShipmentPointType } from './types';
+import ShipmentPoint from './ShipmentPoint';
+import MapLegend from './MapLegend';
 
 interface GlobeVisualizationProps {
   rotationAngle: number;
